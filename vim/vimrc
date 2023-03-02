@@ -6,7 +6,8 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'w0rp/ale'
 Plug 'valloric/youcompleteme'
 Plug 'itchyny/lightline.vim'
-
+Plug 'nathanaelkane/vim-indent-guides'
+Plug 'scrooloose/nerdtree'
 
 call plug#end()
 
@@ -34,3 +35,16 @@ set nowritebackup
 set whichwrap+=<,>,[,]
 
 set laststatus=2
+
+set expandtab
+
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 1
+
+" Macros
+
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-t> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
