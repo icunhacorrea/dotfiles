@@ -1,0 +1,36 @@
+" Vimplug configurations and plug
+
+call plug#begin()
+
+Plug 'jiangmiao/auto-pairs'
+Plug 'w0rp/ale'
+Plug 'valloric/youcompleteme'
+Plug 'itchyny/lightline.vim'
+
+
+call plug#end()
+
+
+" Vim default configurations
+
+if has("syntax")
+	syntax on
+endif
+
+set ai
+set sm
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+
+set nu
+
+set hls ic scs is
+
+set noswapfile
+set nobackup
+set nowritebackup
+
+set whichwrap+=<,>,[,]
+
+set laststatus=2
