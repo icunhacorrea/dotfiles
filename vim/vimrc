@@ -8,6 +8,8 @@ Plug 'valloric/youcompleteme'
 Plug 'itchyny/lightline.vim'
 Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdtree'
+Plug 'bagrat/vim-buffet'
+Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
