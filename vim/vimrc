@@ -40,8 +40,14 @@ set laststatus=2
 
 set expandtab
 
+" Definitions of plugins
+
 let g:indent_guides_start_level = 2
 let g:indent_guides_guide_size = 1
+
+let g:lightline = {
+      \ 'colorscheme': 'darcula',
+      \ }
 
 " Macros
 
@@ -49,4 +55,5 @@ nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
+
 
