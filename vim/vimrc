@@ -10,6 +10,8 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdtree'
 Plug 'bagrat/vim-buffet'
 Plug 'ryanoasis/vim-devicons'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 
 call plug#end()
 
@@ -25,20 +27,19 @@ set sm
 set tabstop=4
 set softtabstop=4
 set shiftwidth=4
-
+set smarttab
+set smartindent
 set nu
-
 set hls ic scs is
-
 set noswapfile
 set nobackup
 set nowritebackup
-
 set whichwrap+=<,>,[,]
-
 set laststatus=2
-
 set expandtab
+set splitright
+set splitbelow
+set mouse=a
 
 " Definitions of plugins
 
@@ -49,6 +50,15 @@ let g:lightline = {
       \ 'colorscheme': 'darcula',
       \ }
 
+let g:ale_linters = {
+\}
+
+let g:ale_fixers = {
+\   '*': ['trim_whitespace'],
+\}
+
+let g:ale_fix_on_save = 1
+
 " Macros
 
 nnoremap <leader>n :NERDTreeFocus<CR>
@@ -56,4 +66,7 @@ nnoremap <C-n> :NERDTree<CR>
 nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
+" Create splits
+nmap th :split<CR>
+nmap tv :vsplit<CR>
 
