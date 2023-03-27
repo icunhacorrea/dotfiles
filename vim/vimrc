@@ -9,11 +9,8 @@ Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdtree'
 Plug 'bagrat/vim-buffet'
 Plug 'ryanoasis/vim-devicons'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 call plug#end()
 
@@ -64,10 +61,10 @@ let g:ale_fix_on_save = 1
 
 " Macros
 
-nnoremap <leader>n :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-f> :NERDTreeFind<CR>
+nmap <leader>n :NERDTreeFocus<CR>
+nmap <C-n> :NERDTree<CR>
+nmap <C-t> :NERDTreeToggle<CR>
+nmap <C-f> :NERDTreeFind<CR>
 
 " Create splits
 nmap th :split<CR>
