@@ -5,12 +5,12 @@ call plug#begin()
 Plug 'jiangmiao/auto-pairs'
 Plug 'w0rp/ale'
 Plug 'itchyny/lightline.vim'
-Plug 'nathanaelkane/vim-indent-guides'
 Plug 'scrooloose/nerdtree'
 Plug 'bagrat/vim-buffet'
 Plug 'ryanoasis/vim-devicons'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 call plug#end()
 
@@ -43,12 +43,11 @@ set mouse=a
 
 let g:deoplete#enable_at_startup = 1
 
-let g:indent_guides_start_level = 2
-let g:indent_guides_guide_size = 1
-
 let g:lightline = {
       \ 'colorscheme': 'darcula',
       \ }
+
+let g:indent_blankline_char = '┊'
 
 let g:ale_linters = {
 \}
@@ -69,4 +68,3 @@ nmap <C-f> :NERDTreeFind<CR>
 " Create splits
 nmap th :split<CR>
 nmap tv :vsplit<CR>
-
