@@ -50,8 +50,12 @@ return require('packer').startup(function(use)
     use 'rafamadriz/friendly-snippets'
 
     use {
-        "windwp/nvim-autopairs",
+        'windwp/nvim-autopairs',
         config = function() require("nvim-autopairs").setup {} end
+    }
+    
+    use {
+        'windwp/nvim-ts-autotag'
     }
 
     use {
@@ -60,8 +64,8 @@ return require('packer').startup(function(use)
     }
 
     use 'nvim-tree/nvim-web-devicons'
+    
     use {'romgrk/barbar.nvim', requires = 'nvim-web-devicons'}
-
 
     use {
         'nvim-treesitter/nvim-treesitter',
@@ -70,6 +74,8 @@ return require('packer').startup(function(use)
             ts_update()
         end,
     }
+
+    use { "catppuccin/nvim", as = "catppuccin" }
 
 end)
 

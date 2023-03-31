@@ -54,23 +54,74 @@ require('lualine').setup({
     options = { theme = 'dracula' }
 })
 
--- Treesitter work around
-
-vim.api.nvim_create_autocmd({'BufEnter','BufAdd','BufNew','BufNewFile','BufWinEnter'}, {
-    group = vim.api.nvim_create_augroup('TS_FOLD_WORKAROUND', {}),
-    callback = function()
-        vim.opt.foldmethod     = 'expr'
-        vim.opt.foldexpr       = 'nvim_treesitter#foldexpr()'
-    end
-})
 
 -- Treesitter autotag
 
 require'nvim-treesitter.configs'.setup {
+    ensure_installed = { "c", "lua", "cpp", "java", "bash", "html" },
+
+    sync_install = false,
+
+    ignore_install = { "javascript" },
+
+    highlight = {
+        enable = true,
+
+        disable = { "c", "bash" },
+
+        adicional_vim_regex_highlighting = false
+    },
+
     autotag = {
         enable = true,
+        filetypes = { "html" , "xml" },
     }
 }
+
+require('nvim-ts-autotag').setup()
+
+require("catppuccin").setup({
+    flavour = "mocha", -- latte, frappe, macchiato, mocha
+    background = { -- :h background
+        light = "latte",
+        dark = "mocha",
+    },
+    transparent_background = true,
+    show_end_of_buffer = false, -- show the '~' characters after the end of buffers
+    term_colors = false,
+    dim_inactive = {
+        enabled = false,
+        shade = "dark",
+        percentage = 0.15,
+    },
+    no_italic = false, -- Force no italic
+    no_bold = false, -- Force no bold
+    styles = {
+        comments = { "italic" },
+        conditionals = { "italic" },
+        loops = {},
+        functions = {},
+        keywords = {},
+        strings = {},
+        variables = {},
+        numbers = {},
+        booleans = {},
+        properties = {},
+        types = {},
+        operators = {},
+    },
+    color_overrides = {},
+    custom_highlights = {},
+    integrations = {
+        cmp = true,
+        gitsigns = true,
+        nvimtree = true,
+        telescope = true,
+        notify = false,
+        mini = false,
+        -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+    },
+})
 
 -- Vim configurations:
 
@@ -107,10 +158,20 @@ vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+vim.cmd.colorscheme "catppuccin"
+
 -- Nvim Tree keymaps
 
-vim.keymap.set('n', '<C-t>', ':lua require("nvim-tree.api").tree.toggle(false, true)<CR>') 
-vim.keymap.set('n', '<leader>n',':NvimTreeFocus<CR>')
-vim.keymap.set('n', '<C-n>',':NvimTreeOpen<CR>')
-vim.keymap.set('n', '<C-f>',':NvimTreeFindFile<CR>')
+local function opts(desc)
+    return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+end
+
+vim.keymap.set('n', '<C-t>', ':lua require("nvim-tree.api").tree.toggle(false, true)<CR>', opts('Toggle')) 
+vim.keymap.set('n', '<leader>n',':NvimTreeFocus<CR>', opts('Focus'))
+vim.keymap.set('n', '<C-n>',':NvimTreeOpen<CR>', opts('Open'))
+vim.keymap.set('n', '<C-f>',':NvimTreeFindFile<CR>', opts('Find'))
+
+vim.keymap.set('n', '<A-,>', '<Cmd>BufferPrevious<CR>', opts('BufferPrevious'))
+vim.keymap.set('n', '<A-.>', '<Cmd>BufferNext<CR>', opts('BufferNext'))
+vim.keymap.set('n', '<A-c>', '<Cmd>BufferClose<CR>', opts('BufferClose'))
 
