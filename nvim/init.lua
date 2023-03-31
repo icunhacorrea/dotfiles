@@ -160,7 +160,9 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.cmd.colorscheme "catppuccin"
 
--- Nvim Tree keymaps
+-- keymaps
+
+local builtin = require('telescope.builtin')
 
 local function opts(desc)
     return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
@@ -174,4 +176,9 @@ vim.keymap.set('n', '<C-f>',':NvimTreeFindFile<CR>', opts('Find'))
 vim.keymap.set('n', '<A-,>', '<Cmd>BufferPrevious<CR>', opts('BufferPrevious'))
 vim.keymap.set('n', '<A-.>', '<Cmd>BufferNext<CR>', opts('BufferNext'))
 vim.keymap.set('n', '<A-c>', '<Cmd>BufferClose<CR>', opts('BufferClose'))
+
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
