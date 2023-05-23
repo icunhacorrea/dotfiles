@@ -75,7 +75,9 @@ return require('packer').startup(function(use)
         end,
     }
 
-    use { "catppuccin/nvim", as = "catppuccin" }
+    --use { "catppuccin/nvim", as = "catppuccin" }
+
+    use { "rebelot/kanagawa.nvim", as = "kanagawa" }
 
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.1',

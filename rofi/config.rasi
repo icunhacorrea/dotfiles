@@ -1,5 +1,5 @@
 configuration {
-	font: "NotoMono Nerd Font Regular 12";
+	font: "LiterationMono Nerd Font Regular 12";
 	show-icons: true;
 	icon-theme: "Papirus";
   timeout {
@@ -12,4 +12,4 @@ configuration {
   }
 }
 
-@theme "Arc-Dark"
+@theme "gruvbox-dark"
