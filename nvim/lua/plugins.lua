@@ -28,7 +28,7 @@ return require('packer').startup(function(use)
 
     use {
         'w0rp/ale',
-        ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex'},
+        ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex', 'python'},
         cmd = 'ALEEnable',
         config = 'vim.cmd[[ALEEnable]]'
     }
@@ -75,9 +75,9 @@ return require('packer').startup(function(use)
         end,
     }
 
-    --use { "catppuccin/nvim", as = "catppuccin" }
+    use { "folke/tokyonight.nvim", as = "tokyonight" }
 
-    use { "rebelot/kanagawa.nvim", as = "kanagawa" }
+    -- use { "rebelot/kanagawa.nvim", as = "kanagawa" }
 
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.1',
