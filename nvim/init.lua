@@ -8,10 +8,7 @@
 
 require("plugins")
 
-require("indent_blankline").setup {
-    char = '┊',
-    show_trailing_blankline_indent = false,
-}
+require("ibl").setup()
 
 local cmp = require'cmp'
 cmp.setup({
@@ -196,4 +193,3 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
 vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-

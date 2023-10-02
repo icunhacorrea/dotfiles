@@ -24,7 +24,7 @@ return require('packer').startup(function(use)
 
     use 'wbthomason/packer.nvim' -- Have packer manage itself
 
-    use 'lukas-reineke/indent-blankline.nvim'
+    use { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} }
 
     use {
         'w0rp/ale',
@@ -85,4 +85,3 @@ return require('packer').startup(function(use)
     }
 
 end)
-
