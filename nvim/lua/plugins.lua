@@ -27,13 +27,6 @@ return require('packer').startup(function(use)
     use { 'lukas-reineke/indent-blankline.nvim', main = "ibl", opts = {} }
 
     use {
-        'w0rp/ale',
-        ft = {'sh', 'zsh', 'bash', 'c', 'cpp', 'cmake', 'html', 'markdown', 'racket', 'vim', 'tex', 'python'},
-        cmd = 'ALEEnable',
-        config = 'vim.cmd[[ALEEnable]]'
-    }
-
-    use {
         'nvim-tree/nvim-tree.lua',
         requires = {
             'nvim-tree/nvim-web-devicons', -- optional
@@ -46,7 +39,11 @@ return require('packer').startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use 'saadparwaiz1/cmp_luasnip'
 
-    use 'L3MON4D3/LuaSnip'
+    use ({
+        'L3MON4D3/LuaSnip',
+        tag = "v2.*"
+    })
+
     use 'rafamadriz/friendly-snippets'
 
     use {
@@ -80,7 +77,7 @@ return require('packer').startup(function(use)
     -- use { "rebelot/kanagawa.nvim", as = "kanagawa" }
 
     use {
-        'nvim-telescope/telescope.nvim', tag = '0.1.1',
+        'nvim-telescope/telescope.nvim', tag = '0.1.2',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
 

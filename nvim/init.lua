@@ -8,7 +8,9 @@
 
 require("plugins")
 
-require("ibl").setup()
+require("ibl").setup {
+    scope = { enabled = false }
+}
 
 local cmp = require'cmp'
 cmp.setup({
@@ -48,7 +50,7 @@ require("nvim-tree").setup({
 })
 
 require('lualine').setup({
-    options = { theme = 'wombat' }
+    options = { theme = 'horizon' }
 })
 
 
