@@ -12,6 +12,46 @@ require("ibl").setup {
     scope = { enabled = false }
 }
 
+-- Find python3
+local python_path = vim.fn.exepath("python3")
+if python_path == nil or python_path == "" then
+  python_path = vim.g.homebrew_install_dir .. "/bin/python3"
+  if utils.file_or_dir_exists(python_path) then
+    vim.g.python3_host_prog = python_path
+  end
+else
+  vim.g.python3_host_prog = python_path
+end
+
+require("mason").setup()
+require("mason-lspconfig").setup()
+
+local servers = {
+    pyright = { }
+}
+
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+-- Ensure the servers above are installed
+local mason_lspconfig = require 'mason-lspconfig'
+
+mason_lspconfig.setup {
+  ensure_installed = vim.tbl_keys(servers),
+}
+
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    require('lspconfig')[server_name].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
+    }
+  end,
+}
+
 local cmp = require'cmp'
 cmp.setup({
     snippet = {
@@ -31,12 +71,12 @@ cmp.setup({
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     }),
     sources = cmp.config.sources({
-        { name = 'luasnip' }, -- For luasnip users.
+        { name = 'nvim_lsp' },
+        { name = 'luasnip' } -- For luasnip users.
     }, {
         { name = 'buffer' },
     })
 })
-
 
 -- OR setup with some options
 require("nvim-tree").setup({
@@ -172,6 +212,9 @@ vim.cmd "set whichwrap+=<,>,[,],h,l"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+
+
 
 -- keymaps
 
