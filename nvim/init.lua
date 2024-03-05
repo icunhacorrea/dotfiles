@@ -9,7 +9,7 @@
 require("plugins")
 
 require("ibl").setup {
-    scope = { enabled = false }
+    scope = { enabled = false },
 }
 
 -- Find python3
@@ -78,6 +78,40 @@ cmp.setup({
     })
 })
 
+-- LSP config 
+
+-- Use LspAttach autocommand to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    -- Buffer local mappings.
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    local opts = { buffer = ev.buf }
+    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
+    vim.keymap.set('n', '<space>wl', function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, opts)
+    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
+    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
+    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<space>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+  end,
+})
+
+
 -- OR setup with some options
 require("nvim-tree").setup({
     sort_by = "case_sensitive",
@@ -117,59 +151,72 @@ require'nvim-treesitter.configs'.setup {
 
 require('nvim-ts-autotag').setup()
 
-require('rose-pine').setup({
-	--- @usage 'auto'|'main'|'moon'|'dawn'
-	variant = 'moon',
-	--- @usage 'main'|'moon'|'dawn'
-	dark_variant = 'moon',
-	bold_vert_split = false,
-	dim_nc_background = false,
-	disable_background = false,
-	disable_float_background = false,
-	disable_italics = true,
+-- Lua
+require("rose-pine").setup({
+    variant = "auto", -- auto, main, moon, or dawn
+    dark_variant = "moon", -- main, moon, or dawn
+    dim_inactive_windows = false,
+    extend_background_behind_borders = true,
 
-	--- @usage string hex value or named color from rosepinetheme.com/palette
-	groups = {
-		background = 'base',
-		background_nc = '_experimental_nc',
-		panel = 'surface',
-		panel_nc = 'base',
-		border = 'highlight_med',
-		comment = 'muted',
-		link = 'iris',
-		punctuation = 'subtle',
+    enable = {
+        terminal = true,
+        legacy_highlights = true, -- Improve compatibility for previous versions of Neovim
+        migrations = true, -- Handle deprecated options automatically
+    },
 
-		error = 'love',
-		hint = 'iris',
-		info = 'foam',
-		warn = 'gold',
+    styles = {
+        bold = true,
+        italic = true,
+        transparency = false,
+    },
 
-		headings = {
-			h1 = 'iris',
-			h2 = 'foam',
-			h3 = 'rose',
-			h4 = 'gold',
-			h5 = 'pine',
-			h6 = 'foam',
-		}
-		-- or set all headings at once
-		-- headings = 'subtle'
-	},
+    groups = {
+        border = "muted",
+        link = "iris",
+        panel = "surface",
 
-	-- Change specific vim highlight groups
-	-- https://github.com/rose-pine/neovim/wiki/Recipes
-	highlight_groups = {
-		ColorColumn = { bg = 'rose' },
+        error = "love",
+        hint = "iris",
+        info = "foam",
+        note = "pine",
+        todo = "rose",
+        warn = "gold",
 
-		-- Blend colours against the "base" background
-		CursorLine = { bg = 'foam', blend = 10 },
-		StatusLine = { fg = 'love', bg = 'love', blend = 10 },
+        git_add = "foam",
+        git_change = "rose",
+        git_delete = "love",
+        git_dirty = "rose",
+        git_ignore = "muted",
+        git_merge = "iris",
+        git_rename = "pine",
+        git_stage = "iris",
+        git_text = "rose",
+        git_untracked = "subtle",
 
-		-- By default each group adds to the existing config.
-		-- If you only want to set what is written in this config exactly,
-		-- you can set the inherit option:
-		Search = { bg = 'gold', inherit = false },
-	}
+        h1 = "iris",
+        h2 = "foam",
+        h3 = "rose",
+        h4 = "gold",
+        h5 = "pine",
+        h6 = "foam",
+    },
+
+    highlight_groups = {
+        -- Comment = { fg = "foam" },
+        -- VertSplit = { fg = "muted", bg = "muted" },
+    },
+
+    before_highlight = function(group, highlight, palette)
+        -- Disable all undercurls
+        -- if highlight.undercurl then
+        --     highlight.undercurl = false
+        -- end
+        --
+        -- Change palette colour
+        -- if highlight.fg == palette.pine then
+        --     highlight.fg = palette.foam
+        -- end
+    end,
 })
 
 -- Set colorscheme after options
@@ -209,11 +256,10 @@ vim.o.splitbelow = true
 
 vim.cmd "set listchars=eol:!,tab:>=,trail:."
 vim.cmd "set whichwrap+=<,>,[,],h,l"
+vim.cmd "set termguicolors"
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-
-
 
 
 -- keymaps
@@ -224,7 +270,12 @@ local function opts(desc)
     return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
 end
 
--- vim.keymap.set('n', '<C-t>', ':lua require("nvim-tree.api").tree.toggle(false, true)<CR>', opts('Toggle')) 
+-- LSP Mappings
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
+vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
+
 vim.keymap.set('n', '<C-t>', ':NvimTreeToggle<CR>', opts('Toggle'))
 vim.keymap.set('n', '<leader>n',':NvimTreeFocus<CR>', opts('Focus'))
 vim.keymap.set('n', '<C-n>',':NvimTreeOpen<CR>', opts('Open'))

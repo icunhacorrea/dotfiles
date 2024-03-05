@@ -78,8 +78,6 @@ return require('packer').startup(function(use)
 
     use { "rose-pine/neovim", as = "rose-pine" }
 
-    -- use { "rebelot/kanagawa.nvim", as = "kanagawa" }
-
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.2',
         requires = { {'nvim-lua/plenary.nvim'} }
