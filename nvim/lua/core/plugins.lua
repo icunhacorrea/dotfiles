@@ -27,7 +27,12 @@ return require('packer').startup(function(use)
     use 'nvim-tree/nvim-tree.lua'
     use 'nvim-lualine/lualine.nvim'
     use 'lewis6991/gitsigns.nvim'
-    use 'ellisonleao/gruvbox.nvim'
+    use {
+        'folke/tokyonight.nvim',
+        lazy = false,
+        priority = 1000,
+        opts = {}
+    }
     use 'windwp/nvim-ts-autotag'
     use 'romgrk/barbar.nvim'
     use 'windwp/nvim-autopairs'
