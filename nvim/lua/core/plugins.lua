@@ -33,6 +33,7 @@ return require('packer').startup(function(use)
         priority = 1000,
         opts = {}
     }
+    use 'neanias/everforest-nvim'
     use 'windwp/nvim-ts-autotag'
     use 'romgrk/barbar.nvim'
     use 'windwp/nvim-autopairs'

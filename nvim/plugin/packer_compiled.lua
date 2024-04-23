@@ -94,6 +94,11 @@ _G.packer_plugins = {
     path = "/Users/icorrea/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
+  ["everforest-nvim"] = {
+    loaded = true,
+    path = "/Users/icorrea/.local/share/nvim/site/pack/packer/start/everforest-nvim",
+    url = "https://github.com/neanias/everforest-nvim"
+  },
   ["friendly-snippets"] = {
     loaded = true,
     path = "/Users/icorrea/.local/share/nvim/site/pack/packer/start/friendly-snippets",

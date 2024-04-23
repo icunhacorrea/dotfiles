@@ -1,5 +1,8 @@
 require("mason-lspconfig").setup({
-    ensure_installed = { 'pyright' }
+    ensure_installed = {
+        'pyright',
+        'gopls'
+    }
 })
 
 local lspconfig = require('lspconfig')
@@ -13,6 +16,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 )
 
 require('lspconfig').pyright.setup({})
+require('lspconfig').gopls.setup({})
 
 vim.api.nvim_create_autocmd('LspAttach', {
     group = vim.api.nvim_create_augroup('UserLspConfig', {}),
