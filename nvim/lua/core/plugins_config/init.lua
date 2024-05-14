@@ -1,6 +1,5 @@
+require("core.plugins_config.zenburn")
 require("core.plugins_config.nvim_tree")
-require("core.plugins_config.everforest")
-require("core.plugins_config.nightfox")
 require("core.plugins_config.mason")
 require("core.plugins_config.gitsigns")
 require("core.plugins_config.ibl")
