@@ -3,6 +3,7 @@ require("lazy").setup({
 	-- Dependencies
 	{ "nvim-tree/nvim-web-devicons" },
 	{ "nvim-lua/plenary.nvim" },
+    { "MunifTanjim/nui.nvim" },
 	
 	-- Plugins
     { "phha/zenburn.nvim" },
@@ -10,11 +11,12 @@ require("lazy").setup({
 	{ "nvim-lualine/lualine.nvim" },
 	{ "lewis6991/gitsigns.nvim" },
 	{ "windwp/nvim-ts-autotag" },
-	{ "romgrk/barbar.nvim" },
 	{ "windwp/nvim-autopairs" },
+	{ "romgrk/barbar.nvim" },
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	{ "nvim-telescope/telescope.nvim", tag = "0.1.6" },
 	{ "nvim-treesitter/nvim-treesitter", build = ":TSUpdate" },
+    { "VonHeikemen/fine-cmdline.nvim" },
 
 	-- Completion
 	{ "hrsh7th/nvim-cmp" },
