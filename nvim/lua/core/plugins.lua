@@ -6,7 +6,7 @@ require("lazy").setup({
     { "MunifTanjim/nui.nvim" },
     
     -- Plugins
-    { "phha/zenburn.nvim" },
+    { "rebelot/kanagawa.nvim" },
     { "nvim-tree/nvim-tree.lua" },
     { "nvim-lualine/lualine.nvim" },
     { "lewis6991/gitsigns.nvim" },

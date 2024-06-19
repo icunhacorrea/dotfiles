@@ -21,9 +21,9 @@ keymap.set('n', '<s-tab>', '<Cmd>BufferPrevious<CR>', opts)
 keymap.set('n', '<tab>', '<Cmd>BufferNext<CR>', opts)
 keymap.set('n', 'q<tab>', '<Cmd>BufferClose<CR>', opts)
 
-keymap.set('n', 'ss', ':split<Return>', opts)
-keymap.set('n', 'sv', ':vsplit<Return>', opts)
-keymap.set('n', 'sw', '<C-w>w', opts)
+keymap.set('n', '<leader>ss', ':split<Return>', opts)
+keymap.set('n', '<leader>sv', ':vsplit<Return>', opts)
+keymap.set('n', '<leader>sw', '<C-w>w', opts)
 
 keymap.set('n', '<leader>l', ':Lazy<Return>', opts)
 keymap.set('n', '<leader>m', ':Mason<Return>', optq)

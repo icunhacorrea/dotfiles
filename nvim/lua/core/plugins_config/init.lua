@@ -1,4 +1,4 @@
-require("core.plugins_config.zenburn")
+require("core.plugins_config.kanagawa")
 require("core.plugins_config.nvim_tree")
 require("core.plugins_config.mason")
 require("core.plugins_config.gitsigns")

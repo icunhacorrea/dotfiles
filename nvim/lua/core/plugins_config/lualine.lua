@@ -1,7 +1,7 @@
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'zenburn',
+    theme = 'modus-vivendi',
   },
   sections = {
     lualine_a = {

@@ -23,11 +23,6 @@ require'nvim-treesitter.configs'.setup {
         adicional_vim_regex_highlighting = false
     },
 
-    autotag = {
-        enable = true,
-        filetypes = { "html" , "xml" },
-    },
-
     indent = {
         enable = true
     }
