@@ -6,14 +6,14 @@ local lspkind = require('lspkind')
 
 cmp.setup({
     
-    formatting = {
-        format = lspkind.cmp_format({
-            mode = "symbol_text",
-            maxwidth = 50,
-            ellipsis_char = "...",
-            show_labelDetails = true
-        }) 
-    },
+    -- formatting = {
+    --     format = lspkind.cmp_format({
+    --         mode = "symbol_text",
+    --         maxwidth = 50,
+    --         ellipsis_char = "...",
+    --         show_labelDetails = true
+    --     }) 
+    -- },
 
     snippet = {
         expand = function(args)
@@ -21,10 +21,10 @@ cmp.setup({
         end,
     },
 
-    window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered()
-    },
+    -- window = {
+    --     completion = cmp.config.window.bordered(),
+    --     documentation = cmp.config.window.bordered()
+    -- },
 
     mapping = cmp.mapping.preset.insert({
         ['<C-b>'] = cmp.mapping.scroll_docs(-4),

@@ -1,15 +1,3 @@
-require("nvim-tree").setup({
-    sort_by = "case_sensitive",
-
-    renderer = {
-        group_empty = true,
-    },
-
-    filters = {
-        dotfiles = true,
-    },
-})
-
 require'nvim-treesitter.configs'.setup {
     ensure_installed = { "lua", "vim", "bash", "html", "python" },
 
@@ -27,4 +15,3 @@ require'nvim-treesitter.configs'.setup {
         enable = true
     }
 }
-
