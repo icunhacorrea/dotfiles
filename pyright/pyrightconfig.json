@@ -8,8 +8,8 @@
     "reportAssignmentType": false,
     "reportFunctionMemberAccess": false,
     "reportOperatorIssue": false,
+    "reportOptionalMemberAccess": false,
 
-    // Env
-    "venvPath": "",
-    "venv": ""
+    "venvPath": "/Users/icorrea/Library/Caches/pypoetry/virtualenvs/",
+    "venv": "lumine-api-4n_qt_a7-py3.11"
 }
