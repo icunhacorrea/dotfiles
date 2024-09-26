@@ -1,0 +1,15 @@
+{
+    "reportAttributeAccessIssue": false,
+    "reportIncompatibleMethodOverride": false,
+    "reportIncompatibleVariableOverride": false,
+    "reportReturnType": false,
+    "reportArgumentType": false,
+    "reportIndexIssue": false,
+    "reportAssignmentType": false,
+    "reportFunctionMemberAccess": false,
+    "reportOperatorIssue": false,
+
+    // Env
+    "venvPath": "",
+    "venv": ""
+}
