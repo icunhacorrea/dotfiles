@@ -21,7 +21,7 @@
 
 (setq scroll-step 5)
 (setq-default tab-width 4)
-(global-hl-line-mode)
+;; (global-hl-line-mode)
 
 ;; Melpa
 
@@ -43,8 +43,6 @@
   (setq gcmh-high-cons-threshold (* 128 1024 1024))
   (add-hook 'after-init-hook (lambda ()
                                (gcmh-mode))))
-
-;; Web eglot
 
 (use-package eglot
   :custom
@@ -69,20 +67,6 @@
       (eglot-ensure))))
 
 (add-hook 'prog-mode-hook #'maybe-start-eglot)
-
-;; My eglot
-
-;; (use-package eglot
-;;   :ensure t
-;;   :hook ((python-mode . eglot-ensure))
-;;   :config
-;;   (add-to-list 'eglot-server-programs
-;;                '(python-mode . ("pyright-langserver" "--stdio")))
-;;   (setq eglot-autoshutdown t)
-;;   (setq eglot-confirm-server-initiated-edits nil)
-;;   (setq eglot-events-buffer-size 0)
-;;   :custom
-;;   (fset #'jsonrpc--log-event #'ignore))
 
 (with-eval-after-load 'eglot
   (setq completion-category-defaults nil))
@@ -157,9 +141,12 @@
   :config
   (diff-hl-flydiff-mode))
 
-(use-package solarized-theme
+;; subatomic-theme
+;; sumburn-theme
+;; underwarter-theme
+(use-package kuronami-theme
   :ensure t)
-(load-theme 'solarized-dark t)
+(load-theme 'kuronami t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -167,14 +154,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(solarized-theme diff-hl evil-nerd-commenter magit projectile counsel swiper ivy flx company which-key gcmh)))
+   '(copilot eglot diff-hl evil-nerd-commenter magit projectile counsel swiper ivy flx company which-key gcmh)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
-
 
 ;; Custom commands
 
