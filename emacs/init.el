@@ -1,41 +1,57 @@
-;; icorrea basic emacs config
+;; icorrea emacs Configuration
 
-;; modes
+;; Ido mode
 (ido-mode 1)
 
-;; Gui
+;; Env
+(setenv "LSP_USE_PLISTS" "true")
+
+
+;; gui
 
 (global-display-line-numbers-mode +1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
-(setq-default message-log-max nil)
+
+;; General configs
 (setq inhibit-startup-message t
-	  frame-inhibit-implied-resize t
+      frame-inhibit-implied-resize t
       auto-save-default nil
       make-backup-files nil
       create-lockfiles nil
       ido-enable-flex-matching t
-      ido-everywhere t)
+      ido-everywhere t
+      tab-width 4
+      python-indent-offset 4
+      lsp-use-plists t)
 
-(setq scroll-step 5)
-(setq-default tab-width 4)
-;; (global-hl-line-mode)
-
-;; Melpa
-
+;; Package
 (require 'package)
 (setq package-enable-at-startup nil)
 
 (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/"))
+	     '("melpa" . "http://melpa.org/packages/"))
 
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
 (use-package gcmh
   :ensure t
@@ -44,90 +60,45 @@
   (add-hook 'after-init-hook (lambda ()
                                (gcmh-mode))))
 
-(use-package eglot
-  :custom
-  (fset #'jsonrpc--log-event #'ignore)
-  (eglot-events-buffer-size 0)
-  (eglot-sync-connect nil)
-  (eglot-connect-timeout nil)
-  (eglot-autoshutdown t)
-  (eglot-send-changes-idle-time 3)
-  (flymake-no-changes-timeout 5)
-  (eldoc-echo-area-use-multiline-p nil)
-  (setq eglot-ignored-server-capabilities '( :documentHighlightProvider))
-
+(use-package exec-path-from-shell
+  :straight t
   :config
-  (add-to-list 'eglot-server-programs '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio"))))
-
-;; exclude modes from eglot
-(defun maybe-start-eglot ()
-  "Exlude some mode from eglot."
-  (let ((disabled-modes '(emacs-lisp-mode dockerfile-ts-mode)))
-    (unless (apply 'derived-mode-p disabled-modes)
-      (eglot-ensure))))
-
-(add-hook 'prog-mode-hook #'maybe-start-eglot)
-
-(with-eval-after-load 'eglot
-  (setq completion-category-defaults nil))
+  (exec-path-from-shell-initialize))
 
 (use-package which-key
-  :ensure t
+  :straight t
   :config (which-key-mode))
 
+(use-package evil-nerd-commenter
+  :straight t
+  :bind (("M-/" . evilnc-comment-or-uncomment-lines)))
+
+(use-package go-mode
+  :straight t)
+
 (use-package company
-  :ensure t
+  :straight t
   :config
   (setq company-idle-delay 0
 	company-minimum-prefix-length 1)
   (global-company-mode t))
 
+(use-package company-go
+  :straight (:build t)
+  :after (company go))
+
+(use-package underwater-theme
+  :straight t)
+(load-theme 'underwater t)
+
 (use-package flx
-  :ensure t)
-
-(use-package ivy
-  :ensure t
-  :config
-  (ivy-mode)
-  (setq ivy-re-builders-alist
-        '((t . ivy--regex-fuzzy)))
-  (setq ivy-use-virtual-buffers t)
-  (setq enable-recursive-minibuffers t)
-  (setq ivy-initial-inputs-alist nil))
-
-(use-package swiper
-  :ensure t
-  :init
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t
-           enable-recursive-minibuffers t)
-    (global-set-key "\C-f" 'swiper)))
-
-(use-package counsel
-  :ensure t)
-
-(use-package projectile
-  :ensure t
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1)
-  (setq projectile-enable-caching t)
-  (setq projectile-indexing-method 'alien)
-  (setq projectile-completion-system 'ivy)
-  (setq projectile-globally-ignored-file-suffixes '(".log" ".tmp" ".bak"))
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (add-hook 'projectile-mode-hook 'auto-revert-mode))
+  :straight t)
 
 (use-package magit
-  :ensure t)
-
-(use-package evil-nerd-commenter
-  :ensure t
-  :bind (("M-/" . evilnc-comment-or-uncomment-lines)))
+  :straight t)
 
 (use-package diff-hl
-  :ensure t
+  :straight t
   :custom
   (diff-hl-draw-borders nil)
   :config
@@ -141,65 +112,128 @@
   :config
   (diff-hl-flydiff-mode))
 
-;; subatomic-theme
-;; sumburn-theme
-;; underwarter-theme
-(use-package kuronami-theme
-  :ensure t)
-(load-theme 'kuronami t)
+(use-package swiper
+  :straight t
+  :init
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t
+		  enable-recursive-minibuffers t
+		  ivy-re-builders-alist
+		  '((t . ivy--regex-fuzzy))))
+  (global-set-key "\C-f" 'swiper))
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(copilot eglot diff-hl evil-nerd-commenter magit projectile counsel swiper ivy flx company which-key gcmh)))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+(use-package counsel
+  :straight t)
 
-;; Custom commands
+(use-package projectile
+  :straight t
+  :diminish projectile-mode
+  :config
+  (projectile-mode +1)
+  (setq projectile-enable-caching t)
+  (setq projectile-indexing-method 'alien)
+  (setq projectile-completion-system 'ivy)
+  (setq projectile-globally-ignored-file-suffixes '(".log" ".tmp" ".bak"))
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (add-hook 'projectile-mode-hook 'auto-revert-mode))
+
+(use-package yasnippet
+  :straight t
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
+
+(use-package rg
+  :straight t)
+
+;; Terminal
+(use-package vterm
+  :straight t)
+
+;; LSP
+
+;; (use-package eglot
+;;   :config
+;;   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider))
+;;   (setq eglot-send-changes-idle-time 0.1))
+
+;; (with-eval-after-load 'eglot
+;;   (add-to-list 'eglot-server-programs
+;; 		   `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
+;; 	           `(go-mode . ("gopls"))))
+
+
+;; (use-package eglot-booster
+;;   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
+;;   :after eglot
+;;   :config (eglot-booster-mode))
+
+;; Hooks
+
+;; (add-hook 'go-mode-hook #'eglot-ensure)
+;; (add-hook 'python-mode-hook #'eglot-ensure)
+;; (add-hook 'python-ts-mode-hook #'eglot-ensure)
+
+(use-package lsp-mode
+  :straight t
+  :hook ((python-mode . lsp-deferred)
+	 (python-ts-mode . lsp-deferred)
+	 (go-mode . lsp-deferred))
+  :commands (lsp lsp-deferred))
+
+(use-package lsp-pyright
+  :straight t
+  :hook (python-mode . (lambda ()
+                          (require 'lsp-pyright)
+                          (lsp-deferred))))
+
+(defun my/vterm-disable-line-numbers ()
+  (display-line-numbers-mode -1))
 
 (defun my-open-line-below ()
-  "Insert a new line below the current one and move the cursor to it."
   (interactive)
   (end-of-line)
   (newline-and-indent))
 
 (defun my-open-line-above ()
-  "Insert a new line above the current one and move the cursor to it."
   (interactive)
   (beginning-of-line)
   (newline)
   (forward-line -1)
   (indent-according-to-mode))
 
-(defun my-run-make-tests ()
+(defun run-make-tests ()
   (interactive)
   (let ((default-directory (or (projectile-project-root)
                                default-directory)))
     (compile "make test")))
 
-(defun my/increase-font-size ()
-  "Increase font size by 10."
+(defun run-make-format ()
   (interactive)
-  (set-face-attribute 'default nil
-                      :height (+ (face-attribute 'default :height) 10)))
+  (let ((default-directory (or (projectile-project-root)
+                               default-directory)))
+    (compile "make format")))
 
-(defun my/decrease-font-size ()
-  "Decrease font size by 10."
+(defun delete-current-line ()
   (interactive)
-  (set-face-attribute 'default nil
-                      :height (- (face-attribute 'default :height) 10)))
+  (delete-region (line-beginning-position) (line-end-position))
+  (delete-char 1))
 
+(defun select-current-line ()
+  (interactive)
+  (move-end-of-line nil)
+  (push-mark (line-beginning-position) nil t)
+  (activate-mark))
 
-;; Custom shortcuts
+;; Hooks
+
+(add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
+(add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
+
 (global-set-key (kbd "C-o") 'my-open-line-below)
 (global-set-key (kbd "C-S-o") 'my-open-line-above)
-(global-set-key (kbd "C-c m t") 'my-run-make-tests)
-(global-set-key (kbd "C-=") 'my/increase-font-size)
-(global-set-key (kbd "C--") 'my/decrease-font-size)
+(global-set-key (kbd "C-c m t") 'run-make-tests)
+(global-set-key (kbd "C-c m f") 'run-make-format)
+(global-set-key (kbd "C-c k") 'delete-current-line)
+(global-set-key (kbd "C-c l") 'select-current-line)
