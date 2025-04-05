@@ -1,13 +1,9 @@
 ;; icorrea emacs Configuration
 
-;; Ido mode
-(ido-mode 1)
-
 ;; Env
 (setenv "LSP_USE_PLISTS" "true")
 
-
-;; gui
+;; Gui
 
 (global-display-line-numbers-mode +1)
 (tool-bar-mode -1)
@@ -21,11 +17,8 @@
       auto-save-default nil
       make-backup-files nil
       create-lockfiles nil
-      ido-enable-flex-matching t
-      ido-everywhere t
-      tab-width 4
-      python-indent-offset 4
-      lsp-use-plists t)
+      lsp-use-plists t
+      text-scale-mode-step 1.05)
 
 ;; Package
 (require 'package)
@@ -55,6 +48,7 @@
 
 (use-package gcmh
   :ensure t
+  :straight t
   :config
   (setq gcmh-high-cons-threshold (* 128 1024 1024))
   (add-hook 'after-init-hook (lambda ()
@@ -87,9 +81,19 @@
   :straight (:build t)
   :after (company go))
 
-(use-package underwater-theme
+;; underwater
+;; oceanic
+;; subatomic
+
+;; (use-package catppuccin-theme
+;;   :straight t
+;;   :config
+;;   (setq catppuccin-flavor 'mocha))
+;; (load-theme 'catppuccin t)
+
+(use-package spacegray-theme
   :straight t)
-(load-theme 'underwater t)
+(load-theme 'spacegray t)
 
 (use-package flx
   :straight t)
@@ -147,46 +151,67 @@
 (use-package rg
   :straight t)
 
+(use-package breadcrumb
+  :straight t
+  :config
+  (breadcrumb-mode t))
+
 ;; Terminal
 (use-package vterm
-  :straight t)
+  :straight t
+  :config
+  (setq vterm-term-environment-variable "xterm-256color"))
+
+(use-package fancy-compilation
+  :straight t
+  :commands (fancy-compilation-mode)
+  :config
+  (setq fancy-compilation-override-colors nil))
+
+(with-eval-after-load 'compile
+  (fancy-compilation-mode))
 
 ;; LSP
 
 ;; (use-package eglot
-;;   :config
-;;   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider))
-;;   (setq eglot-send-changes-idle-time 0.1))
-
-;; (with-eval-after-load 'eglot
-;;   (add-to-list 'eglot-server-programs
+;;   :ensure t
+;;   :custom
+;;   (eglot-autoshutdown t)
+;;   (eglot-events-buffe-size 0)
+;;   (eglot-extend-to-xref nil)
+;;   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider
+;; 					    :hoverProvider))
+;;   (setq eglot-send-changes-idle-time 0.1)
+;;   (fset #'jsonrpc--log-event #'ignore)
+;;   :config 'eglot-server-programs
 ;; 		   `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
-;; 	           `(go-mode . ("gopls"))))
+;; 	           `(go-mode . ("gopls")))
 
 
-;; (use-package eglot-booster
-;;   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-;;   :after eglot
-;;   :config (eglot-booster-mode))
+(use-package eglot
+  :config
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider))
+  (setq eglot-autoshutdown t)
+  (setq eglot-events-buffer-size 0)
+  (setq eglot-send-changes-idle-time 0.1))
 
-;; Hooks
+(use-package eglot-booster
+  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
+  :after eglot
+  :config (eglot-booster-mode))
 
-;; (add-hook 'go-mode-hook #'eglot-ensure)
-;; (add-hook 'python-mode-hook #'eglot-ensure)
-;; (add-hook 'python-ts-mode-hook #'eglot-ensure)
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+		   `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
+	           `(go-mode . ("gopls"))))
 
-(use-package lsp-mode
+
+(use-package expand-region
   :straight t
-  :hook ((python-mode . lsp-deferred)
-	 (python-ts-mode . lsp-deferred)
-	 (go-mode . lsp-deferred))
-  :commands (lsp lsp-deferred))
+  :bind ("C-=" . er/expand-region))
 
-(use-package lsp-pyright
-  :straight t
-  :hook (python-mode . (lambda ()
-                          (require 'lsp-pyright)
-                          (lsp-deferred))))
+(use-package dockerfile-mode
+  :straight t)
 
 (defun my/vterm-disable-line-numbers ()
   (display-line-numbers-mode -1))
@@ -226,8 +251,13 @@
   (push-mark (line-beginning-position) nil t)
   (activate-mark))
 
+(fset #'jsonrpc--log-event #'ignore)
+
 ;; Hooks
 
+(add-hook 'go-mode-hook #'eglot-ensure)
+(add-hook 'python-mode-hook #'eglot-ensure)
+(add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
 
