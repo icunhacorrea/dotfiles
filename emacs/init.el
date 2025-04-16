@@ -1,6 +1,5 @@
 ;; icorrea emacs Configuration
 
-;; Env
 (setenv "LSP_USE_PLISTS" "true")
 
 ;; Gui
@@ -10,6 +9,8 @@
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
+
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; General configs
 (setq inhibit-startup-message t
@@ -46,13 +47,16 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(setq straight-built-in-pseudo-packages '(project xref eglot))
+
 (use-package gcmh
   :ensure t
   :straight t
-  :config
+  :init
   (setq gcmh-high-cons-threshold (* 128 1024 1024))
-  (add-hook 'after-init-hook (lambda ()
-                               (gcmh-mode))))
+  (setq gcmh-idle-delay 5)
+  :config
+  (gcmh-mode 1))
 
 (use-package exec-path-from-shell
   :straight t
@@ -81,19 +85,19 @@
   :straight (:build t)
   :after (company go))
 
-;; underwater
-;; oceanic
-;; subatomic
+(use-package vertico
+  :straight t
+  :init
+  (vertico-mode))
 
-;; (use-package catppuccin-theme
-;;   :straight t
-;;   :config
-;;   (setq catppuccin-flavor 'mocha))
-;; (load-theme 'catppuccin t)
+(use-package orderless
+  :straight t
+  :config
+  (setq completion-styles '(orderless)))
 
-(use-package spacegray-theme
-  :straight t)
-(load-theme 'spacegray t)
+;; (use-package subatomic-theme
+;;   :straight t)
+;; (load-theme 'subatomic t)
 
 (use-package flx
   :straight t)
@@ -115,6 +119,11 @@
 (use-package diff-hl-flydiff
   :config
   (diff-hl-flydiff-mode))
+
+;; (custom-set-faces
+;;  '(diff-hl-insert ((t (:background "#225522" :foreground "#00ff00"))))
+;;  '(diff-hl-change ((t (:background "#444400" :foreground "#ffff00"))))
+;;  '(diff-hl-delete ((t (:background "#552222" :foreground "#ff0000")))))
 
 (use-package swiper
   :straight t
@@ -138,6 +147,7 @@
   (setq projectile-enable-caching t)
   (setq projectile-indexing-method 'alien)
   (setq projectile-completion-system 'ivy)
+  (setq )
   (setq projectile-globally-ignored-file-suffixes '(".log" ".tmp" ".bak"))
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (add-hook 'projectile-mode-hook 'auto-revert-mode))
@@ -173,45 +183,36 @@
 
 ;; LSP
 
-;; (use-package eglot
-;;   :ensure t
-;;   :custom
-;;   (eglot-autoshutdown t)
-;;   (eglot-events-buffe-size 0)
-;;   (eglot-extend-to-xref nil)
-;;   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider
-;; 					    :hoverProvider))
-;;   (setq eglot-send-changes-idle-time 0.1)
-;;   (fset #'jsonrpc--log-event #'ignore)
-;;   :config 'eglot-server-programs
-;; 		   `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
-;; 	           `(go-mode . ("gopls")))
-
-
 (use-package eglot
+  :hook ((python-mode . eglot-ensure)
+	 (python-ts-mode . eglot-ensure)
+	 (go-mode . eglot-ensure))
   :config
   (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider))
   (setq eglot-autoshutdown t)
+  (setq eglot-extend-to-xref t)
   (setq eglot-events-buffer-size 0)
-  (setq eglot-send-changes-idle-time 0.1))
+  (setq eglot-send-changes-idle-time 0.1)
+  (add-to-list 'eglot-server-programs
+	       `(python-mode python-ts-mode . ("basedpyright-langserver" "--stdio"))
+	       `(go-mode . ("gopls"))))
+
 
 (use-package eglot-booster
   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
   :after eglot
   :config (eglot-booster-mode))
 
-(with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs
-		   `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
-	           `(go-mode . ("gopls"))))
-
+(fset #'jsonrpc--log-event #'ignore)
 
 (use-package expand-region
   :straight t
-  :bind ("C-=" . er/expand-region))
+  :bind ("C-0" . er/expand-region))
 
 (use-package dockerfile-mode
   :straight t)
+
+;; Personal defs
 
 (defun my/vterm-disable-line-numbers ()
   (display-line-numbers-mode -1))
@@ -251,13 +252,10 @@
   (push-mark (line-beginning-position) nil t)
   (activate-mark))
 
-(fset #'jsonrpc--log-event #'ignore)
-
 ;; Hooks
-
-(add-hook 'go-mode-hook #'eglot-ensure)
-(add-hook 'python-mode-hook #'eglot-ensure)
-(add-hook 'python-ts-mode-hook #'eglot-ensure)
+;; (add-hook 'go-mode-hook #'eglot-ensure)
+;; (add-hook 'python-mode-hook #'eglot-ensure)
+;; (add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
 
