@@ -1,0 +1,14 @@
+# Font
+font-family = "BitstromWera Nerd Font"
+cursor-style = "block"
+
+window-theme = "light"
+font-thicken = "true"
+macos-titlebar-style = "native"
+
+# Theme
+theme = "catppuccin-mocha"
+
+# Window
+window-padding-y = 3
+window-padding-x = 3
