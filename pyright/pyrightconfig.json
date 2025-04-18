@@ -1,4 +1,5 @@
 {
+    "pythonVersion": "3.11",
     "reportAttributeAccessIssue": false,
     "reportIncompatibleMethodOverride": false,
     "reportIncompatibleVariableOverride": false,
@@ -9,7 +10,18 @@
     "reportFunctionMemberAccess": false,
     "reportOperatorIssue": false,
     "reportOptionalMemberAccess": false,
+    "reportUnknownVariableType": false,
+    "reportUnknownArgumentType": false,
+    "reportUnknownMemberType": false,
+    "reportUnknownParameterType": false,
+    "reportMissingParameterType": false,
+    "reportUnannotatedClassAttribute": false,
+    "reportMissingTypeStubs": false,
+    "reportImplicitOverride": false,
+    "reportUnreachable": false,
+    "reportAny": false,
 
-    "venvPath": "/Users/icorrea/Library/Caches/pypoetry/virtualenvs/",
-    "venv": "lumine-api-4n_qt_a7-py3.11"
+    "venvPath": "",
+    "venv": "",
+    "useLibraryCodeForTypes": true,
 }
