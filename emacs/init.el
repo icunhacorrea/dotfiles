@@ -85,6 +85,11 @@
   :straight (:build t)
   :after (company go))
 
+(use-package company-quickhelp
+  :straight t
+  :config
+  (company-quickhelp-mode))
+
 (use-package vertico
   :straight t
   :init
@@ -95,9 +100,9 @@
   :config
   (setq completion-styles '(orderless)))
 
-;; (use-package subatomic-theme
-;;   :straight t)
-;; (load-theme 'subatomic t)
+(use-package material-theme
+  :straight t)
+(load-theme 'material t)
 
 (use-package flx
   :straight t)
