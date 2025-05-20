@@ -9,6 +9,7 @@
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
+;; (set-face-attribute 'default nil :family "Hack" :height 140)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -100,9 +101,9 @@
   :config
   (setq completion-styles '(orderless)))
 
-(use-package material-theme
+(use-package ef-themes
   :straight t)
-(load-theme 'material t)
+(load-theme  'ef-owl :no-confirm)
 
 (use-package flx
   :straight t)
@@ -124,11 +125,6 @@
 (use-package diff-hl-flydiff
   :config
   (diff-hl-flydiff-mode))
-
-;; (custom-set-faces
-;;  '(diff-hl-insert ((t (:background "#225522" :foreground "#00ff00"))))
-;;  '(diff-hl-change ((t (:background "#444400" :foreground "#ffff00"))))
-;;  '(diff-hl-delete ((t (:background "#552222" :foreground "#ff0000")))))
 
 (use-package swiper
   :straight t
@@ -203,12 +199,12 @@
 	       `(go-mode . ("gopls"))))
 
 
-(use-package eglot-booster
-  :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-  :after eglot
-  :config (eglot-booster-mode))
+;; (use-package eglot-booster
+;;   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
+;;   :after eglot
+;;   :config (eglot-booster-mode))
 
-(fset #'jsonrpc--log-event #'ignore)
+;; (fset #'jsonrpc--log-event #'ignore)
 
 (use-package expand-region
   :straight t
@@ -270,3 +266,18 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c k") 'delete-current-line)
 (global-set-key (kbd "C-c l") 'select-current-line)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("fae5872ff90462502b3bedfe689c02d2fa281bc63d33cb007b94a199af6ccf24"
+     "71b688e7ef7c844512fa7c4de7e99e623de99a2a8b3ac3df4d02f2cd2c3215e7"
+     default)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
