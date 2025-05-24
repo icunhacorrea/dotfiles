@@ -75,6 +75,10 @@
 (use-package go-mode
   :straight t)
 
+(use-package yaml-mode
+  :straight t
+  :mode ("\\.ya?ml\\'" . yaml-mode))
+
 (use-package company
   :straight t
   :config
