@@ -5,11 +5,11 @@
 ;; Gui
 
 (global-display-line-numbers-mode +1)
+(global-hl-line-mode)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
-;; (set-face-attribute 'default nil :family "Hack" :height 140)
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -107,7 +107,7 @@
 
 (use-package ef-themes
   :straight t)
-(load-theme  'ef-owl :no-confirm)
+(load-theme  'ef-dream :no-confirm)
 
 (use-package flx
   :straight t)
@@ -171,6 +171,11 @@
   :config
   (breadcrumb-mode t))
 
+(use-package move-text
+  :straight t
+  :config
+  (move-text-default-bindings))
+
 ;; Terminal
 (use-package vterm
   :straight t
@@ -185,6 +190,13 @@
 
 (with-eval-after-load 'compile
   (fancy-compilation-mode))
+
+(use-package mood-line
+  :straight t
+  :config
+  (mood-line-mode)
+  :custom
+  (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
 ;; LSP
 
@@ -202,13 +214,6 @@
 	       `(python-mode python-ts-mode . ("basedpyright-langserver" "--stdio"))
 	       `(go-mode . ("gopls"))))
 
-
-;; (use-package eglot-booster
-;;   :straight (eglot-booster :type git :host github :repo "jdtsmith/eglot-booster")
-;;   :after eglot
-;;   :config (eglot-booster-mode))
-
-;; (fset #'jsonrpc--log-event #'ignore)
 
 (use-package expand-region
   :straight t
