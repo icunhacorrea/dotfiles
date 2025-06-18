@@ -10,7 +10,7 @@
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
-
+(setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; General configs
@@ -95,6 +95,9 @@
   :config
   (company-quickhelp-mode))
 
+(use-package flx
+  :straight flx)
+
 (use-package vertico
   :straight t
   :init
@@ -108,9 +111,6 @@
 (use-package ef-themes
   :straight t)
 (load-theme  'ef-dream :no-confirm)
-
-(use-package flx
-  :straight t)
 
 (use-package magit
   :straight t)
@@ -263,12 +263,10 @@
   (activate-mark))
 
 (defun scroll-half-page-down ()
-  "Scroll down half a page."
   (interactive)
   (scroll-up-command (/ (window-body-height) 2)))
 
 (defun scroll-half-page-up ()
-  "Scroll up half a page."
   (interactive)
   (scroll-down-command (/ (window-body-height) 2)))
 
