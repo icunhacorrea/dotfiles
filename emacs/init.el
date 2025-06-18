@@ -262,19 +262,30 @@
   (push-mark (line-beginning-position) nil t)
   (activate-mark))
 
+(defun scroll-half-page-down ()
+  "Scroll down half a page."
+  (interactive)
+  (scroll-up-command (/ (window-body-height) 2)))
+
+(defun scroll-half-page-up ()
+  "Scroll up half a page."
+  (interactive)
+  (scroll-down-command (/ (window-body-height) 2)))
+
+
 ;; Hooks
-;; (add-hook 'go-mode-hook #'eglot-ensure)
-;; (add-hook 'python-mode-hook #'eglot-ensure)
-;; (add-hook 'python-ts-mode-hook #'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
 
+(global-set-key (kbd "C-v") 'scroll-half-page-down)
+(global-set-key (kbd "M-v") 'scroll-half-page-up)
 (global-set-key (kbd "C-o") 'my-open-line-below)
 (global-set-key (kbd "C-S-o") 'my-open-line-above)
 (global-set-key (kbd "C-c m t") 'run-make-tests)
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c k") 'delete-current-line)
 (global-set-key (kbd "C-c l") 'select-current-line)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
