@@ -9,9 +9,9 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
-(set-face-attribute 'default nil :family "Menlo" :height 140)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
+(set-face-attribute 'default nil :family "Menlo" :height 140)
 
 ;; General configs
 (setq inhibit-startup-message t
@@ -130,6 +130,9 @@
   :config
   (diff-hl-flydiff-mode))
 
+(use-package counsel
+  :straight t)
+
 (use-package swiper
   :straight t
   :init
@@ -141,8 +144,6 @@
 		  '((t . ivy--regex-fuzzy))))
   (global-set-key "\C-f" 'swiper))
 
-(use-package counsel
-  :straight t)
 
 (use-package projectile
   :straight t
