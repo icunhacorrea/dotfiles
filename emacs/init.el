@@ -9,6 +9,7 @@
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
+(global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
 (set-face-attribute 'default nil :family "Menlo" :height 140)
@@ -35,23 +36,22 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-        'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+;; (defvar bootstrap-version)
+;; (let ((bootstrap-file
+;;       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+;;       (bootstrap-version 5))
+;;   (unless (file-exists-p bootstrap-file)
+;;     (with-current-buffer
+;;         (url-retrieve-synchronously
+;;         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+;;         'silent 'inhibit-cookies)
+;;       (goto-char (point-max))
+;;       (eval-print-last-sexp)))
+;;   (load bootstrap-file nil 'nomessage))
 
-(setq straight-built-in-pseudo-packages '(project xref eglot))
+;; (setq straight-built-in-pseudo-packages '(project xref eglot))
 
 (use-package gcmh
-  :ensure t
   :straight t
   :init
   (setq gcmh-high-cons-threshold (* 128 1024 1024))
@@ -110,7 +110,7 @@
 
 (use-package ef-themes
   :straight t)
-(load-theme  'ef-dream :no-confirm)
+(load-theme  'ef-elea-dark :no-confirm)
 
 (use-package magit
   :straight t)
@@ -271,6 +271,12 @@
   (interactive)
   (scroll-down-command (/ (window-body-height) 2)))
 
+(defun my/pop-to-vterm ()
+  (interactive)
+  (let ((buf (get-buffer "*vterm*")))
+    (if buf
+        (pop-to-buffer buf)
+      (vterm))))
 
 ;; Hooks
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
@@ -284,6 +290,7 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c k") 'delete-current-line)
 (global-set-key (kbd "C-c l") 'select-current-line)
+(global-set-key (kbd "C-c v") #'my/pop-to-vterm)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
