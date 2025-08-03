@@ -6,9 +6,11 @@
 
 (global-display-line-numbers-mode +1)
 (global-hl-line-mode)
+(global-visual-line-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 (electric-pair-mode 1)
+(which-key-mode 1)
 (global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -36,20 +38,20 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-;; (defvar bootstrap-version)
-;; (let ((bootstrap-file
-;;       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-;;       (bootstrap-version 5))
-;;   (unless (file-exists-p bootstrap-file)
-;;     (with-current-buffer
-;;         (url-retrieve-synchronously
-;;         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-;;         'silent 'inhibit-cookies)
-;;       (goto-char (point-max))
-;;       (eval-print-last-sexp)))
-;;   (load bootstrap-file nil 'nomessage))
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; (setq straight-built-in-pseudo-packages '(project xref eglot))
+(setq straight-built-in-pseudo-packages '(project xref eglot))
 
 (use-package gcmh
   :straight t
@@ -64,9 +66,9 @@
   :config
   (exec-path-from-shell-initialize))
 
-(use-package which-key
-  :straight t
-  :config (which-key-mode))
+;; (use-package which-key
+  ;; :straight t
+  ;; :config (which-key-mode))
 
 (use-package evil-nerd-commenter
   :straight t
