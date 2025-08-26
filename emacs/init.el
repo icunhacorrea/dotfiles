@@ -66,10 +66,6 @@
   :config
   (exec-path-from-shell-initialize))
 
-;; (use-package which-key
-  ;; :straight t
-  ;; :config (which-key-mode))
-
 (use-package evil-nerd-commenter
   :straight t
   :bind (("M-/" . evilnc-comment-or-uncomment-lines)))
@@ -92,11 +88,6 @@
   :straight (:build t)
   :after (company go))
 
-(use-package company-quickhelp
-  :straight t
-  :config
-  (company-quickhelp-mode))
-
 (use-package flx
   :straight flx)
 
@@ -112,7 +103,7 @@
 
 (use-package ef-themes
   :straight t)
-(load-theme  'ef-elea-dark :no-confirm)
+(load-theme  'ef-owl :no-confirm)
 
 (use-package magit
   :straight t)
@@ -217,6 +208,10 @@
 	       `(python-mode python-ts-mode . ("basedpyright-langserver" "--stdio"))
 	       `(go-mode . ("gopls"))))
 
+
+(use-package eldoc-box
+  :straight t
+  :hook (prog-mode . eldoc-box-hover-at-point-mode))
 
 (use-package expand-region
   :straight t
