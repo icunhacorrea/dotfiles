@@ -14,7 +14,7 @@
 (global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-face-attribute 'default nil :family "Menlo" :height 140)
+(set-face-attribute 'default nil :family "Fira Code" :height 140)
 
 ;; General configs
 (setq inhibit-startup-message t
