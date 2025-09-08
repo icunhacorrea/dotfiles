@@ -1,7 +1,5 @@
 ;; icorrea emacs Configuration
 
-(setenv "LSP_USE_PLISTS" "true")
-
 ;; Gui
 
 (global-display-line-numbers-mode +1)
@@ -14,7 +12,7 @@
 (global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-face-attribute 'default nil :family "Fira Code" :height 140)
+(set-face-attribute 'default nil :family "Menlo" :height 140)
 
 ;; General configs
 (setq inhibit-startup-message t
@@ -61,6 +59,8 @@
   :config
   (gcmh-mode 1))
 
+(setq read-process-output-max (* 2 1024 1024))
+
 (use-package exec-path-from-shell
   :straight t
   :config
@@ -103,7 +103,7 @@
 
 (use-package ef-themes
   :straight t)
-(load-theme  'ef-owl :no-confirm)
+(load-theme  'ef-night :no-confirm)
 
 (use-package magit
   :straight t)
@@ -199,7 +199,7 @@
 	 (python-ts-mode . eglot-ensure)
 	 (go-mode . eglot-ensure))
   :config
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider))
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider :inlayHintProvider))
   (setq eglot-autoshutdown t)
   (setq eglot-extend-to-xref t)
   (setq eglot-events-buffer-size 0)
