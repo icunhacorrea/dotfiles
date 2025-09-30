@@ -253,15 +253,15 @@
 
 (defun run-make-tests ()
   (interactive)
-  (let ((default-directory (or (projectile-project-root)
-                               default-directory)))
-    (compile "make test")))
+  (let ((compile-command "make test")
+        (compilation-read-command nil))
+    (project-compile)))
 
 (defun run-make-format ()
   (interactive)
-  (let ((default-directory (or (projectile-project-root)
-                               default-directory)))
-    (compile "make format")))
+  (let ((compile-command "make format")
+        (compilation-read-command nil))
+    (project-compile)))
 
 (defun delete-current-line ()
   (interactive)
@@ -290,14 +290,12 @@
       (vterm))))
 
 (defun my/project-find-file-other-window-always-split ()
-  "Always split to the right and run `project-find-file` there."
   (interactive)
   (split-window-right)
   (other-window 1)
   (call-interactively #'project-find-file))
 
 (defun my/consult-project-buffer-other-window ()
-  "Open `consult-project-buffer` in another window (split if needed)."
   (interactive)
   (unless (> (length (window-list)) 1)
     (split-window-right))
@@ -317,3 +315,15 @@
 (global-set-key (kbd "C-c k") 'delete-current-line)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages nil))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
