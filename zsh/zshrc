@@ -1,0 +1,29 @@
+HISTFILE=~/.zsh_history
+HISTSIZE=5000
+SAVEHIST=5000
+
+# opções recomendadas para histórico
+
+setopt append_history          # adiciona, não sobrescreve
+setopt share_history           # compartilha entre sessões
+setopt hist_ignore_dups        # ignora comandos duplicados consecutivos
+setopt hist_ignore_all_dups    # ignora duplicados em geral
+setopt hist_reduce_blanks      # remove espaços extras
+setopt hist_verify             # mostra antes de executar com !n
+setopt inc_append_history      # grava no arquivo imediatamente
+
+setopt correct                 # sugere correção se você digitar errado
+setopt autocd                  # cd só digitando o nome do diretório
+
+autoload -Uz compinit
+compinit
+
+# Aliases
+alias ls='ls --color=auto'         # Linux (GNU coreutils)
+alias ll='ls -lh --color=auto'     # listagem longa, human-readable
+alias la='ls -lha --color=auto'    # inclui arquivos ocultos
+
+alias ls='ls -G'       # ativa cores no macOS
+alias ll='ls -lGh'     # long listing + cores + human-readable
+alias la='ls -lGah'    # inclui ocultos
+alias grep='grep --color=auto'
