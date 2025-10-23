@@ -1,18 +1,16 @@
-;; icorrea emacs Configuration
-
-;; Gui
+;; icorrea emacs configuration
 
 (global-display-line-numbers-mode +1)
-(global-hl-line-mode)
 (global-visual-line-mode -1)
 (tool-bar-mode -1)
-(scroll-bar-mode -1)
 (electric-pair-mode 1)
 (which-key-mode 1)
+(scroll-bar-mode -1)
+(recentf-mode 1)
 (global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-face-attribute 'default nil :family "Menlo" :height 140)
+(set-face-attribute 'default nil :family "Hack" :height 130)
 
 ;; General configs
 (setq inhibit-startup-message t
@@ -25,8 +23,6 @@
 
 ;; Package
 (require 'package)
-(setq package-enable-at-startup nil)
-
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/"))
 
@@ -36,148 +32,114 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-(defvar bootstrap-version)
-(let ((bootstrap-file
-      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-        'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
-
-(setq straight-built-in-pseudo-packages '(project xref eglot))
-
 (use-package gcmh
-  :straight t
+  :ensure t
   :init
-  (setq gcmh-high-cons-threshold (* 128 1024 1024))
+  (setq gcmh-high-cons-threshold (* 256 1024 1024))
   (setq gcmh-idle-delay 5)
   :config
   (gcmh-mode 1))
 
-(setq read-process-output-max (* 2 1024 1024))
+(setq read-process-output-max (* 4 1024 1024))
+
+;; (use-package catppuccin-theme
+;;   :ensure t
+;;   :config
+;;   (setq catppuccin-flavor 'frappe))
+;; (load-theme 'catppuccin :no-confirm)
+
+(use-package subatomic-theme
+  :ensure t)
+(load-theme 'subatomic :no-confirm)
 
 (use-package exec-path-from-shell
-  :straight t
+  :ensure t
   :config
   (exec-path-from-shell-initialize))
 
 (use-package evil-nerd-commenter
-  :straight t
+  :ensure t
   :bind (("M-/" . evilnc-comment-or-uncomment-lines)))
 
 (use-package go-mode
-  :straight t)
+  :ensure t)
 
 (use-package yaml-mode
-  :straight t
+  :ensure t
   :mode ("\\.ya?ml\\'" . yaml-mode))
 
-(use-package company
-  :straight t
-  :config
-  (setq company-idle-delay 0
-	company-minimum-prefix-length 1)
-  (global-company-mode t))
+(use-package corfu
+  :ensure t
+  :init
+  (global-corfu-mode)
+  (setq corfu-auto t)
+  (setq corfu-auto-delay 0.2)
+  (setq corfu-auto-prefix 2)
+  (setq corfu-cycle t))
 
-(use-package company-go
-  :straight (:build t)
-  :after (company go))
-
-(use-package flx
-  :straight flx)
+(use-package magit
+  :ensure t)
 
 (use-package vertico
-  :straight t
+  :ensure t
   :init
   (vertico-mode))
 
 (use-package orderless
-  :straight t
+  :ensure t
+  :custom
+  (orderless-matching-styles '(orderless-literal
+                               orderless-flex))
+  (completion-styles '(orderless basic)))
+
+(use-package marginalia
+  :ensure t
+  :init (marginalia-mode))
+
+(use-package consult
+  :ensure t
   :config
-  (setq completion-styles '(orderless)))
+  :bind (("C-s" . consult-line)
+         ("C-x b" . consult-buffer)
+         ("C-c p f" . project-find-file)
+	 ("C-c p 4 f" . my/project-find-file-other-window-always-split)
+         ("C-c p p" . project-switch-project)
+         ("C-c p b" . consult-project-buffer)
+	 ("C-c p 4 b" . my/consult-project-buffer-other-window)
+         ("C-c p s" . consult-ripgrep)
+         ("C-c p k" . project-kill-buffers)
+	 ("C-c p r" . consult-recent-file)))
 
-(use-package ef-themes
-  :straight t)
-(load-theme  'ef-night :no-confirm)
-
-(use-package magit
-  :straight t)
+;; (use-package diff-hl
+;;   :ensure t
+;;   :custom
+;;   (diff-hl-draw-borders nil)
+;;   :config
+;;   (global-diff-hl-mode))
 
 (use-package diff-hl
-  :straight t
+  :ensure t
   :custom
   (diff-hl-draw-borders nil)
   :config
-  (global-diff-hl-mode)
-  (add-hook 'magit-pre-refresh-hook
-            'diff-hl-magit-pre-refresh)
-  (add-hook 'magit-post-refresh-hook
-            'diff-hl-magit-post-refresh))
-
-(use-package diff-hl-flydiff
-  :config
-  (diff-hl-flydiff-mode))
-
-(use-package counsel
-  :straight t)
-
-(use-package swiper
-  :straight t
-  :init
-  (progn
-    (ivy-mode 1)
-    (setq ivy-use-virtual-buffers t
-		  enable-recursive-minibuffers t
-		  ivy-re-builders-alist
-		  '((t . ivy--regex-fuzzy))))
-  (global-set-key "\C-f" 'swiper))
-
-
-(use-package projectile
-  :straight t
-  :diminish projectile-mode
-  :config
-  (projectile-mode +1)
-  (setq projectile-enable-caching t)
-  (setq projectile-indexing-method 'alien)
-  (setq projectile-completion-system 'ivy)
-  (setq )
-  (setq projectile-globally-ignored-file-suffixes '(".log" ".tmp" ".bak"))
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (add-hook 'projectile-mode-hook 'auto-revert-mode))
-
-(use-package yasnippet
-  :straight t
-  :config
-  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-  (yas-global-mode 1))
+  (set-face-attribute 'diff-hl-insert nil :background "#388E3C")
+  (set-face-attribute 'diff-hl-delete nil :background "#D32F2F")
+  (set-face-attribute 'diff-hl-change nil :background "#FBC02D")
+  (global-diff-hl-mode))
 
 (use-package rg
-  :straight t)
+  :ensure t)
 
-(use-package breadcrumb
-  :straight t
-  :config
-  (breadcrumb-mode t))
+(use-package flx
+  :ensure flx)
 
-(use-package move-text
-  :straight t
-  :config
-  (move-text-default-bindings))
-
-;; Terminal
 (use-package vterm
-  :straight t
+  :ensure t
   :config
   (setq vterm-term-environment-variable "xterm-256color"))
 
 (use-package fancy-compilation
-  :straight t
+  :ensure t
   :commands (fancy-compilation-mode)
   :config
   (setq fancy-compilation-override-colors nil))
@@ -185,8 +147,31 @@
 (with-eval-after-load 'compile
   (fancy-compilation-mode))
 
+(use-package expand-region
+  :ensure t
+  :bind ("C-0" . er/expand-region))
+
+(use-package dockerfile-mode
+  :ensure t)
+
+(use-package breadcrumb
+  :ensure t
+  :config
+  (breadcrumb-mode t))
+
+(use-package move-text
+  :ensure t
+  :config
+  (move-text-default-bindings))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+  (yas-global-mode 1))
+
 (use-package mood-line
-  :straight t
+  :ensure t
   :config
   (mood-line-mode)
   :custom
@@ -195,32 +180,24 @@
 ;; LSP
 
 (use-package eglot
-  :hook ((python-mode . eglot-ensure)
-	 (python-ts-mode . eglot-ensure)
-	 (go-mode . eglot-ensure))
   :config
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider :hoverProvider :inlayHintProvider))
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider: :hoverProvider))
   (setq eglot-autoshutdown t)
   (setq eglot-extend-to-xref t)
   (setq eglot-events-buffer-size 0)
-  (setq eglot-send-changes-idle-time 0.1)
+  (setq eglot-send-changes-idle-time 0.5)
   (add-to-list 'eglot-server-programs
-	       `(python-mode python-ts-mode . ("basedpyright-langserver" "--stdio"))
+	       `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
 	       `(go-mode . ("gopls"))))
 
-
-(use-package eldoc-box
-  :straight t
-  :hook (prog-mode . eldoc-box-hover-at-point-mode))
-
-(use-package expand-region
-  :straight t
-  :bind ("C-0" . er/expand-region))
-
-(use-package dockerfile-mode
-  :straight t)
+(use-package eglot-booster
+  :after eglot
+  :config
+  (setq eglot-booster-io-only t)
+  (eglot-booster-mode))
 
 ;; Personal defs
+(global-set-key (kbd "C-c k") 'kill-whole-line)
 
 (defun my/vterm-disable-line-numbers ()
   (display-line-numbers-mode -1))
@@ -239,20 +216,15 @@
 
 (defun run-make-tests ()
   (interactive)
-  (let ((default-directory (or (projectile-project-root)
-                               default-directory)))
-    (compile "make test")))
+  (let ((compile-command "make test")
+        (compilation-read-command nil))
+    (project-compile)))
 
 (defun run-make-format ()
   (interactive)
-  (let ((default-directory (or (projectile-project-root)
-                               default-directory)))
-    (compile "make format")))
-
-(defun delete-current-line ()
-  (interactive)
-  (delete-region (line-beginning-position) (line-end-position))
-  (delete-char 1))
+  (let ((compile-command "make format")
+        (compilation-read-command nil))
+    (project-compile)))
 
 (defun select-current-line ()
   (interactive)
@@ -275,9 +247,30 @@
         (pop-to-buffer buf)
       (vterm))))
 
+(defun my/project-find-file-other-window-always-split ()
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (call-interactively #'project-find-file))
+
+(defun my/consult-project-buffer-other-window ()
+  (interactive)
+  (unless (> (length (window-list)) 1)
+    (split-window-right))
+  (other-window 1)
+  (call-interactively #'consult-project-buffer))
+
 ;; Hooks
+(add-hook 'python-mode-hook 'eglot-ensure)
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+(add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
+(add-hook 'eglot-managed-mode-hook 'flymake-ruff-load)
+(add-hook 'magit-pre-refresh-hook
+          'diff-hl-magit-pre-refresh)
+(add-hook 'magit-post-refresh-hook
+          'diff-hl-magit-post-refresh)
 
 (global-set-key (kbd "C-v") 'scroll-half-page-down)
 (global-set-key (kbd "M-v") 'scroll-half-page-up)
@@ -285,19 +278,28 @@
 (global-set-key (kbd "C-S-o") 'my-open-line-above)
 (global-set-key (kbd "C-c m t") 'run-make-tests)
 (global-set-key (kbd "C-c m f") 'run-make-format)
-(global-set-key (kbd "C-c k") 'delete-current-line)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("fae5872ff90462502b3bedfe689c02d2fa281bc63d33cb007b94a199af6ccf24"
-     "71b688e7ef7c844512fa7c4de7e99e623de99a2a8b3ac3df4d02f2cd2c3215e7"
-     default)))
+   '("24fba8d15d029ca2ed94dc4722459e9b64d679d7ae14b77b61412e2c85b3b641"
+     "806dd05c68b646416d686fc45d1ed7e6a173511e2548cd62150473fe5149f66c"
+     default))
+ '(package-selected-packages
+   '(breadcrumb catppuccin-theme company consult corfu diff-hl
+		dockerfile-mode eglot-booster evil-nerd-commenter
+		exec-path-from-shell expand-region fancy-compilation
+		flx flymake-ruff gcmh go-mode magit marginalia
+		mood-line move-text oceanic-theme orderless rg s
+		spacegray-theme subatomic-theme vertico vterm
+		yaml-mode yasnippet zenburn-theme))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url
+		    "https://github.com/jdtsmith/eglot-booster"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
