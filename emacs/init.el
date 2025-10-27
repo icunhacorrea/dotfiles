@@ -1,18 +1,21 @@
 ;; icorrea emacs configuration
 
+;; LSP speed up
+(setenv "LSP_USE_PLISTS" "true")
+
 (global-display-line-numbers-mode +1)
 (global-visual-line-mode -1)
 (tool-bar-mode -1)
 (electric-pair-mode 1)
 (which-key-mode 1)
 (scroll-bar-mode -1)
-(recentf-mode 1)
 (global-auto-revert-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
-(set-face-attribute 'default nil :family "Hack" :height 130)
+(set-face-attribute 'default nil :family "Fira Code" :height 130)
 
 ;; General configs
+
 (setq inhibit-startup-message t
       frame-inhibit-implied-resize t
       auto-save-default nil
@@ -21,7 +24,8 @@
       lsp-use-plists t
       text-scale-mode-step 1.05)
 
-;; Package
+;; Packaging
+
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/"))
@@ -32,10 +36,11 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+
 (use-package gcmh
   :ensure t
   :init
-  (setq gcmh-high-cons-threshold (* 256 1024 1024))
+  (setq gcmh-high-cons-threshold (* 128 1024 1024))
   (setq gcmh-idle-delay 5)
   :config
   (gcmh-mode 1))
@@ -71,11 +76,12 @@
 (use-package corfu
   :ensure t
   :init
-  (global-corfu-mode)
-  (setq corfu-auto t)
-  (setq corfu-auto-delay 0.2)
-  (setq corfu-auto-prefix 2)
-  (setq corfu-cycle t))
+  (setq corfu-auto t
+        corfu-auto-delay 0.2
+        corfu-auto-prefix 2
+        corfu-cycle t)
+  :config
+  (global-corfu-mode 1))
 
 (use-package magit
   :ensure t)
@@ -109,13 +115,6 @@
          ("C-c p s" . consult-ripgrep)
          ("C-c p k" . project-kill-buffers)
 	 ("C-c p r" . consult-recent-file)))
-
-;; (use-package diff-hl
-;;   :ensure t
-;;   :custom
-;;   (diff-hl-draw-borders nil)
-;;   :config
-;;   (global-diff-hl-mode))
 
 (use-package diff-hl
   :ensure t
@@ -180,8 +179,9 @@
 ;; LSP
 
 (use-package eglot
+  :ensure t
   :config
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider: :hoverProvider))
+  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider: :hoverProvider :codeActionProvider))
   (setq eglot-autoshutdown t)
   (setq eglot-extend-to-xref t)
   (setq eglot-events-buffer-size 0)
@@ -193,7 +193,6 @@
 (use-package eglot-booster
   :after eglot
   :config
-  (setq eglot-booster-io-only t)
   (eglot-booster-mode))
 
 ;; Personal defs
@@ -266,7 +265,6 @@
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
-(add-hook 'eglot-managed-mode-hook 'flymake-ruff-load)
 (add-hook 'magit-pre-refresh-hook
           'diff-hl-magit-pre-refresh)
 (add-hook 'magit-post-refresh-hook
@@ -280,29 +278,3 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("24fba8d15d029ca2ed94dc4722459e9b64d679d7ae14b77b61412e2c85b3b641"
-     "806dd05c68b646416d686fc45d1ed7e6a173511e2548cd62150473fe5149f66c"
-     default))
- '(package-selected-packages
-   '(breadcrumb catppuccin-theme company consult corfu diff-hl
-		dockerfile-mode eglot-booster evil-nerd-commenter
-		exec-path-from-shell expand-region fancy-compilation
-		flx flymake-ruff gcmh go-mode magit marginalia
-		mood-line move-text oceanic-theme orderless rg s
-		spacegray-theme subatomic-theme vertico vterm
-		yaml-mode yasnippet zenburn-theme))
- '(package-vc-selected-packages
-   '((eglot-booster :vc-backend Git :url
-		    "https://github.com/jdtsmith/eglot-booster"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
