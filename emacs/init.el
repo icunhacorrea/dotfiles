@@ -291,27 +291,3 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(breadcrumb cape catppuccin-theme cobalt-theme consult corfu
-		desert-theme diff-hl dockerfile-mode eglot-booster
-		evil-nerd-commenter exec-path-from-shell expand-region
-		fancy-compilation flatland-theme flx flymake-ruff gcmh
-		go-mode heroku-theme magit marginalia mood-line
-		move-text orderless rg spacegray-theme subtle-blue
-		subtle-blue-theme tommyh-theme underwater-theme
-		vertico vterm yaml-mode yasnippet))
- '(package-vc-selected-packages
-   '((eglot-booster :vc-backend Git :url
-		    "https://github.com/jdtsmith/eglot-booster"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
