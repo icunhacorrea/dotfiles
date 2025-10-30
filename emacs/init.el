@@ -1,4 +1,4 @@
-;; icorrea emacs configuration
+;; icorre emacs configuration
 
 ;; LSP speed up
 (setenv "LSP_USE_PLISTS" "true")
@@ -10,8 +10,10 @@
 (which-key-mode 1)
 (scroll-bar-mode -1)
 (global-auto-revert-mode 1)
+(recentf-mode 1)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
+(setq native-comp-async-report-warnings-errors nil)
 (set-face-attribute 'default nil :family "Fira Code" :height 130)
 
 ;; General configs
@@ -36,7 +38,6 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
-
 (use-package gcmh
   :ensure t
   :init
@@ -47,15 +48,14 @@
 
 (setq read-process-output-max (* 4 1024 1024))
 
-;; (use-package catppuccin-theme
-;;   :ensure t
-;;   :config
-;;   (setq catppuccin-flavor 'frappe))
-;; (load-theme 'catppuccin :no-confirm)
+;; tommyh-theme
+;; spacegray-theme
+;; underwater
+;; zenburn
 
-(use-package subatomic-theme
+(use-package underwater-theme
   :ensure t)
-(load-theme 'subatomic :no-confirm)
+(load-theme 'underwater :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -82,6 +82,12 @@
         corfu-cycle t)
   :config
   (global-corfu-mode 1))
+
+(use-package cape
+  :ensure t
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-dabbrev))
 
 (use-package magit
   :ensure t)
@@ -121,10 +127,12 @@
   :custom
   (diff-hl-draw-borders nil)
   :config
-  (set-face-attribute 'diff-hl-insert nil :background "#388E3C")
-  (set-face-attribute 'diff-hl-delete nil :background "#D32F2F")
-  (set-face-attribute 'diff-hl-change nil :background "#FBC02D")
-  (global-diff-hl-mode))
+  (global-diff-hl-mode)
+
+  (custom-set-faces
+   '(diff-hl-insert ((t (:background "#a8e6a1" :foreground "a8e6a1"))))
+   '(diff-hl-delete ((t (:background "#f8b7b3" :foreground "f8b7b3"))))
+   '(diff-hl-change ((t (:background "#fff59d" :foreground "fff59d"))))))
 
 (use-package rg
   :ensure t)
@@ -153,11 +161,6 @@
 (use-package dockerfile-mode
   :ensure t)
 
-(use-package breadcrumb
-  :ensure t
-  :config
-  (breadcrumb-mode t))
-
 (use-package move-text
   :ensure t
   :config
@@ -176,12 +179,21 @@
   :custom
   (mood-line-glyph-alist mood-line-glyphs-fira-code))
 
-;; LSP
+(use-package breadcrumb
+  :ensure t
+  :config
+  (breadcrumb-mode t))
 
+(use-package flymake-ruff
+  :ensure t
+  :hook (eglot-managed-mode . flymake-ruff-load))
+
+;; LSP
 (use-package eglot
   :ensure t
   :config
-  (setq eglot-ignored-server-capabilities '(:documentHighlightProvider: :hoverProvider :codeActionProvider))
+  (setq eglot-ignored-server-capabilities
+	'(:documentHighlightProvider :hoverProvider))
   (setq eglot-autoshutdown t)
   (setq eglot-extend-to-xref t)
   (setq eglot-events-buffer-size 0)
@@ -193,6 +205,7 @@
 (use-package eglot-booster
   :after eglot
   :config
+  (setq eglot-booster-io-only t)
   (eglot-booster-mode))
 
 ;; Personal defs
@@ -278,3 +291,27 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(breadcrumb cape catppuccin-theme cobalt-theme consult corfu
+		desert-theme diff-hl dockerfile-mode eglot-booster
+		evil-nerd-commenter exec-path-from-shell expand-region
+		fancy-compilation flatland-theme flx flymake-ruff gcmh
+		go-mode heroku-theme magit marginalia mood-line
+		move-text orderless rg spacegray-theme subtle-blue
+		subtle-blue-theme tommyh-theme underwater-theme
+		vertico vterm yaml-mode yasnippet))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url
+		    "https://github.com/jdtsmith/eglot-booster"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
