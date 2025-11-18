@@ -49,13 +49,15 @@
 (setq read-process-output-max (* 4 1024 1024))
 
 ;; tommyh-theme
-;; spacegray-theme
 ;; underwater
 ;; zenburn
 
-(use-package underwater-theme
-  :ensure t)
-(load-theme 'underwater :no-confirm)
+;; (use-package underwater-theme
+  ;; :ensure t)
+;; (load-theme 'underwater :no-confirm)
+
+(load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
+(load-theme 'fairyfloss :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -127,12 +129,7 @@
   :custom
   (diff-hl-draw-borders nil)
   :config
-  (global-diff-hl-mode)
-
-  (custom-set-faces
-   '(diff-hl-insert ((t (:background "#a8e6a1" :foreground "a8e6a1"))))
-   '(diff-hl-delete ((t (:background "#f8b7b3" :foreground "f8b7b3"))))
-   '(diff-hl-change ((t (:background "#fff59d" :foreground "fff59d"))))))
+  (global-diff-hl-mode))
 
 (use-package rg
   :ensure t)
@@ -208,6 +205,9 @@
   (setq eglot-booster-io-only t)
   (eglot-booster-mode))
 
+(use-package eldoc-box
+  :ensure t)
+
 ;; Personal defs
 (global-set-key (kbd "C-c k") 'kill-whole-line)
 
@@ -277,6 +277,7 @@
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
+(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
 (add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
 (add-hook 'magit-pre-refresh-hook
           'diff-hl-magit-pre-refresh)
@@ -291,3 +292,27 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("ff2a34c6bb2cfe9ed1acfb32febadc1f837536b2c4f39a4abf2e3a7c25a28fa6"
+     "baf2269d9e304ba98dc5f577d4e16dc9bfa3ea88daf46989c9bc2ee8166cb425"
+     "55b52a29495a6d9f35f7acd370d62c3671587cb93db42701fc08846e8996c0a6"
+     default))
+ '(package-selected-packages
+   '(breadcrumb cobalt-theme eglot-booster subatomic-theme tommyh-theme
+		underwater-theme))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url
+		    "https://github.com/jdtsmith/eglot-booster"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(diff-hl-change ((t (:background "#fff59d" :foreground "fff59d"))))
+ '(diff-hl-delete ((t (:background "#f8b7b3" :foreground "f8b7b3"))))
+ '(diff-hl-insert ((t (:background "#a8e6a1" :foreground "a8e6a1")))))
