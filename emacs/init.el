@@ -1,4 +1,4 @@
-;; icorre emacs configuration
+;; icorre emacs configuration -*- lexical-binding: t; -*-
 
 ;; LSP speed up
 (setenv "LSP_USE_PLISTS" "true")
@@ -52,12 +52,12 @@
 ;; underwater
 ;; zenburn
 
-;; (use-package underwater-theme
-  ;; :ensure t)
-;; (load-theme 'underwater :no-confirm)
+;; (load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
+;; (load-theme 'fairyfloss :no-confirm)
 
-(load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
-(load-theme 'fairyfloss :no-confirm)
+(use-package ayu-theme
+  :ensure t)
+(load-theme 'ayu-grey :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -211,9 +211,6 @@
 ;; Personal defs
 (global-set-key (kbd "C-c k") 'kill-whole-line)
 
-(defun my/vterm-disable-line-numbers ()
-  (display-line-numbers-mode -1))
-
 (defun my-open-line-below ()
   (interactive)
   (end-of-line)
@@ -278,7 +275,7 @@
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
-(add-hook 'vterm-mode-hook #'my/vterm-disable-line-numbers)
+(add-hook 'vterm-mode-hook (lambda() (display-line-numbers-mode -1)))
 (add-hook 'magit-pre-refresh-hook
           'diff-hl-magit-pre-refresh)
 (add-hook 'magit-post-refresh-hook
@@ -298,13 +295,20 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("ff2a34c6bb2cfe9ed1acfb32febadc1f837536b2c4f39a4abf2e3a7c25a28fa6"
+   '("15cdf123689e3d76ca08c1bcd9ef6d85f37df994d577686b7593c6114a8fa165"
+     "ff2a34c6bb2cfe9ed1acfb32febadc1f837536b2c4f39a4abf2e3a7c25a28fa6"
      "baf2269d9e304ba98dc5f577d4e16dc9bfa3ea88daf46989c9bc2ee8166cb425"
      "55b52a29495a6d9f35f7acd370d62c3671587cb93db42701fc08846e8996c0a6"
      default))
  '(package-selected-packages
-   '(breadcrumb cobalt-theme eglot-booster subatomic-theme tommyh-theme
-		underwater-theme))
+   '(andreas-theme ayu-theme breadcrumb cape catppuccin-theme consult
+		   corfu diff-hl dockerfile-mode eglot-booster
+		   eldoc-box evil-nerd-commenter exec-path-from-shell
+		   expand-region fancy-compilation flx flymake-ruff
+		   gcmh go-mode magit marginalia mood-line move-text
+		   orderless rg solarized-theme solorized-emacs
+		   solorized-theme timu-macos-theme tommyh-theme
+		   vertico vterm yaml-mode yasnippet zenburn-theme))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url
 		    "https://github.com/jdtsmith/eglot-booster"))))
