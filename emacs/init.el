@@ -55,9 +55,9 @@
 ;; (load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
 ;; (load-theme 'fairyfloss :no-confirm)
 
-(use-package ayu-theme
+(use-package zenburn-theme
   :ensure t)
-(load-theme 'ayu-grey :no-confirm)
+(load-theme 'zenburn :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
