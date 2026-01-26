@@ -14,7 +14,7 @@
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq native-comp-async-report-warnings-errors nil)
-(set-face-attribute 'default nil :family "Fira Code" :height 130)
+(set-face-attribute 'default nil :family "Menlo" :height 130)
 
 ;; General configs
 
@@ -48,16 +48,12 @@
 
 (setq read-process-output-max (* 4 1024 1024))
 
-;; tommyh-theme
-;; underwater
-;; zenburn
-
 ;; (load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
 ;; (load-theme 'fairyfloss :no-confirm)
 
-(use-package zenburn-theme
+(use-package underwater-theme
   :ensure t)
-(load-theme 'zenburn :no-confirm)
+(load-theme 'underwater :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -124,10 +120,20 @@
          ("C-c p k" . project-kill-buffers)
 	 ("C-c p r" . consult-recent-file)))
 
+;; (use-package diff-hl
+;;   :ensure t
+;;   :custom
+;;   (diff-hl-draw-borders nil)
+;;   :config
+;;   (global-diff-hl-mode))
+
+
 (use-package diff-hl
   :ensure t
-  :custom
-  (diff-hl-draw-borders nil)
+  :custom-face
+  (diff-hl-change ((t (:background "#fff59d" :foreground "#fff59d"))))
+  (diff-hl-delete ((t (:background "#f8b7b3" :foreground "#f8b7b3"))))
+  (diff-hl-insert ((t (:background "#a8e6a1" :foreground "#a8e6a1"))))
   :config
   (global-diff-hl-mode))
 
@@ -186,6 +192,19 @@
   :hook (eglot-managed-mode . flymake-ruff-load))
 
 ;; LSP
+;; (use-package eglot
+;;   :ensure t
+;;   :config
+;;   (setq eglot-ignored-server-capabilities
+;; 	'(:documentHighlightProvider :hoverProvider))
+;;   (setq eglot-autoshutdown t)
+;;   (setq eglot-extend-to-xref t)
+;;   (setq eglot-events-buffer-size 0)
+;;   (setq eglot-send-changes-idle-time 0.5)
+;;   (add-to-list 'eglot-server-programs
+;; 	       `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
+;; 	       `(go-mode . ("gopls"))))
+
 (use-package eglot
   :ensure t
   :config
@@ -196,14 +215,23 @@
   (setq eglot-events-buffer-size 0)
   (setq eglot-send-changes-idle-time 0.5)
   (add-to-list 'eglot-server-programs
-	       `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
-	       `(go-mode . ("gopls"))))
+               '((python-mode python-ts-mode) . ("zubanls")))
+  (add-to-list 'eglot-server-programs
+               '((go-mode) . ("gopls"))))
 
 (use-package eglot-booster
   :after eglot
   :config
   (setq eglot-booster-io-only t)
   (eglot-booster-mode))
+
+(use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config
+  (global-flycheck-eglot-mode 1))
+
+(use-package flycheck-inline :ensure t)
 
 (use-package eldoc-box
   :ensure t)
@@ -270,16 +298,17 @@
   (call-interactively #'consult-project-buffer))
 
 ;; Hooks
+(add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
 (add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
 (add-hook 'vterm-mode-hook (lambda() (display-line-numbers-mode -1)))
-(add-hook 'magit-pre-refresh-hook
-          'diff-hl-magit-pre-refresh)
-(add-hook 'magit-post-refresh-hook
-          'diff-hl-magit-post-refresh)
+;; (add-hook 'magit-pre-refresh-hook
+;;           'diff-hl-magit-pre-refresh)
+;; (add-hook 'magit-post-refresh-hook
+;;           'diff-hl-magit-post-refresh)
 
 (global-set-key (kbd "C-v") 'scroll-half-page-down)
 (global-set-key (kbd "M-v") 'scroll-half-page-up)
@@ -289,34 +318,3 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("15cdf123689e3d76ca08c1bcd9ef6d85f37df994d577686b7593c6114a8fa165"
-     "ff2a34c6bb2cfe9ed1acfb32febadc1f837536b2c4f39a4abf2e3a7c25a28fa6"
-     "baf2269d9e304ba98dc5f577d4e16dc9bfa3ea88daf46989c9bc2ee8166cb425"
-     "55b52a29495a6d9f35f7acd370d62c3671587cb93db42701fc08846e8996c0a6"
-     default))
- '(package-selected-packages
-   '(andreas-theme ayu-theme breadcrumb cape catppuccin-theme consult
-		   corfu diff-hl dockerfile-mode eglot-booster
-		   eldoc-box evil-nerd-commenter exec-path-from-shell
-		   expand-region fancy-compilation flx flymake-ruff
-		   gcmh go-mode magit marginalia mood-line move-text
-		   orderless rg solarized-theme solorized-emacs
-		   solorized-theme timu-macos-theme tommyh-theme
-		   vertico vterm yaml-mode yasnippet zenburn-theme))
- '(package-vc-selected-packages
-   '((eglot-booster :vc-backend Git :url
-		    "https://github.com/jdtsmith/eglot-booster"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(diff-hl-change ((t (:background "#fff59d" :foreground "fff59d"))))
- '(diff-hl-delete ((t (:background "#f8b7b3" :foreground "f8b7b3"))))
- '(diff-hl-insert ((t (:background "#a8e6a1" :foreground "a8e6a1")))))
