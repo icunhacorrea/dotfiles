@@ -14,7 +14,7 @@
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq native-comp-async-report-warnings-errors nil)
-(set-face-attribute 'default nil :family "Menlo" :height 130)
+(set-face-attribute 'default nil :family "Menlo" :height 140)
 
 ;; General configs
 
@@ -51,9 +51,9 @@
 ;; (load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
 ;; (load-theme 'fairyfloss :no-confirm)
 
-(use-package underwater-theme
+(use-package ancient-one-dark-theme
   :ensure t)
-(load-theme 'underwater :no-confirm)
+(load-theme 'ancient-one-dark :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -119,14 +119,6 @@
          ("C-c p s" . consult-ripgrep)
          ("C-c p k" . project-kill-buffers)
 	 ("C-c p r" . consult-recent-file)))
-
-;; (use-package diff-hl
-;;   :ensure t
-;;   :custom
-;;   (diff-hl-draw-borders nil)
-;;   :config
-;;   (global-diff-hl-mode))
-
 
 (use-package diff-hl
   :ensure t
@@ -215,7 +207,7 @@
   (setq eglot-events-buffer-size 0)
   (setq eglot-send-changes-idle-time 0.5)
   (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("zubanls")))
+               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '((go-mode) . ("gopls"))))
 
@@ -303,12 +295,7 @@
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
-(add-hook 'eglot-managed-mode-hook #'eldoc-box-hover-at-point-mode t)
 (add-hook 'vterm-mode-hook (lambda() (display-line-numbers-mode -1)))
-;; (add-hook 'magit-pre-refresh-hook
-;;           'diff-hl-magit-pre-refresh)
-;; (add-hook 'magit-post-refresh-hook
-;;           'diff-hl-magit-post-refresh)
 
 (global-set-key (kbd "C-v") 'scroll-half-page-down)
 (global-set-key (kbd "M-v") 'scroll-half-page-up)
@@ -318,3 +305,4 @@
 (global-set-key (kbd "C-c m f") 'run-make-format)
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
+
