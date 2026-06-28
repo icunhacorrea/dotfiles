@@ -11,10 +11,17 @@
 (scroll-bar-mode -1)
 (global-auto-revert-mode 1)
 (recentf-mode 1)
+(setq-default bidi-display-reordering 'left-to-right)
+(setq bidi-inhibit-bpa t)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
 (setq native-comp-async-report-warnings-errors nil)
-(set-face-attribute 'default nil :family "Menlo" :height 140)
+(setq which-func-modes '(python-ts-mode))
+(set-face-attribute 'default nil :family "SauceCodePro Nerd Font" :height 140)
+
+;; Tree sit major
+(setq major-mode-remap-alist
+      '((python-mode . python-ts-mode)))
 
 ;; General configs
 
@@ -24,10 +31,11 @@
       make-backup-files nil
       create-lockfiles nil
       lsp-use-plists t
+      fast-but-imprecise-scrolling t
       text-scale-mode-step 1.05)
 
 ;; Packaging
-
+(setq package-enable-at-startup nil)
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/"))
@@ -41,19 +49,17 @@
 (use-package gcmh
   :ensure t
   :init
-  (setq gcmh-high-cons-threshold (* 128 1024 1024))
+  (setq gcmh-high-cons-threshold (* 256 1024 1024))
   (setq gcmh-idle-delay 5)
   :config
   (gcmh-mode 1))
 
 (setq read-process-output-max (* 4 1024 1024))
 
-;; (load-file "~/Workspace/fairyfloss-emacs/fairyfloss-theme.el")
-;; (load-theme 'fairyfloss :no-confirm)
-
-(use-package ancient-one-dark-theme
-  :ensure t)
-(load-theme 'ancient-one-dark :no-confirm)
+(use-package ef-themes
+  :ensure t
+  :config)
+(load-theme 'ef-dream :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -75,7 +81,7 @@
   :ensure t
   :init
   (setq corfu-auto t
-        corfu-auto-delay 0.2
+        corfu-auto-delay 0.3
         corfu-auto-prefix 2
         corfu-cycle t)
   :config
@@ -167,36 +173,17 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
 
-(use-package mood-line
-  :ensure t
-  :config
-  (mood-line-mode)
-  :custom
-  (mood-line-glyph-alist mood-line-glyphs-fira-code))
-
-(use-package breadcrumb
-  :ensure t
-  :config
-  (breadcrumb-mode t))
-
 (use-package flymake-ruff
   :ensure t
   :hook (eglot-managed-mode . flymake-ruff-load))
 
-;; LSP
-;; (use-package eglot
-;;   :ensure t
-;;   :config
-;;   (setq eglot-ignored-server-capabilities
-;; 	'(:documentHighlightProvider :hoverProvider))
-;;   (setq eglot-autoshutdown t)
-;;   (setq eglot-extend-to-xref t)
-;;   (setq eglot-events-buffer-size 0)
-;;   (setq eglot-send-changes-idle-time 0.5)
-;;   (add-to-list 'eglot-server-programs
-;; 	       `(python-mode python-ts-mode . ("pyright-langserver" "--stdio"))
-;; 	       `(go-mode . ("gopls"))))
+;; Tree sitter
 
+(setq treesit-language-source-alist
+      '((python "https://github.com/tree-sitter/tree-sitter-python")
+        (go "https://github.com/tree-sitter/tree-sitter-go")))
+
+;; LSP
 (use-package eglot
   :ensure t
   :config
@@ -207,7 +194,7 @@
   (setq eglot-events-buffer-size 0)
   (setq eglot-send-changes-idle-time 0.5)
   (add-to-list 'eglot-server-programs
-               '((python-mode python-ts-mode) . ("pyright-langserver" "--stdio")))
+               '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '((go-mode) . ("gopls"))))
 
@@ -217,19 +204,9 @@
   (setq eglot-booster-io-only t)
   (eglot-booster-mode))
 
-(use-package flycheck-eglot
-  :ensure t
-  :after (flycheck eglot)
-  :config
-  (global-flycheck-eglot-mode 1))
-
-(use-package flycheck-inline :ensure t)
-
-(use-package eldoc-box
-  :ensure t)
-
 ;; Personal defs
 (global-set-key (kbd "C-c k") 'kill-whole-line)
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
 
 (defun my-open-line-below ()
   (interactive)
@@ -289,13 +266,30 @@
   (other-window 1)
   (call-interactively #'consult-project-buffer))
 
+
+(defun my-project-breadcrumb ()
+  (when-let* ((file (buffer-file-name))
+              (project (project-current nil)))
+    (mapconcat #'identity
+               (split-string
+                (file-relative-name file (project-root project))
+                "/")
+               " > ")))
+
+(defun my-enable-project-breadcrumb ()
+  (setq-local
+   header-line-format
+   '((:eval
+      (when-let ((path (my-project-breadcrumb)))
+        (concat "  " path))))))
+
 ;; Hooks
 (add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
-(add-hook 'python-mode-hook 'eglot-ensure)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
 (add-hook 'vterm-mode-hook (lambda() (display-line-numbers-mode -1)))
+(add-hook 'python-ts-mode-hook #'my-enable-project-breadcrumb)
 
 (global-set-key (kbd "C-v") 'scroll-half-page-down)
 (global-set-key (kbd "M-v") 'scroll-half-page-up)
@@ -306,3 +300,18 @@
 (global-set-key (kbd "C-c l") 'select-current-line)
 (global-set-key (kbd "C-c v") #'my/pop-to-vterm)
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages '(eglot-booster))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url
+		    "https://github.com/jdtsmith/eglot-booster"))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
