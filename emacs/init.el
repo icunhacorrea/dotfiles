@@ -1,8 +1,5 @@
 ;; icorre emacs configuration -*- lexical-binding: t; -*-
 
-;; LSP speed up
-(setenv "LSP_USE_PLISTS" "true")
-
 (global-display-line-numbers-mode +1)
 (global-visual-line-mode -1)
 (tool-bar-mode -1)
@@ -11,17 +8,14 @@
 (scroll-bar-mode -1)
 (global-auto-revert-mode 1)
 (recentf-mode 1)
+(savehist-mode 1)
+(pixel-scroll-precision-mode 1)
 (setq-default bidi-display-reordering 'left-to-right)
 (setq bidi-inhibit-bpa t)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
-(setq native-comp-async-report-warnings-errors nil)
 (setq which-func-modes '(python-ts-mode))
-(set-face-attribute 'default nil :family "SauceCodePro Nerd Font" :height 140)
-
-;; Tree sit major
-(setq major-mode-remap-alist
-      '((python-mode . python-ts-mode)))
+(set-face-attribute 'default nil :family "Monaco" :height 140)
 
 ;; General configs
 
@@ -30,7 +24,6 @@
       auto-save-default nil
       make-backup-files nil
       create-lockfiles nil
-      lsp-use-plists t
       fast-but-imprecise-scrolling t
       text-scale-mode-step 1.05)
 
@@ -59,7 +52,7 @@
 (use-package ef-themes
   :ensure t
   :config)
-(load-theme 'ef-dream :no-confirm)
+(load-theme 'ef-owl :no-confirm)
 
 (use-package exec-path-from-shell
   :ensure t
@@ -138,8 +131,8 @@
 (use-package rg
   :ensure t)
 
-(use-package flx
-  :ensure flx)
+;; (use-package flx
+;;   :ensure flx)
 
 (use-package vterm
   :ensure t
@@ -173,9 +166,25 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
 
-(use-package flymake-ruff
+(use-package dired
+  :ensure nil
+  :custom
+  (dired-listing-switches "-Alh --group-directories-first")
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'always)
+  (dired-dwim-target t)
+  :hook
+  (dired-mode . dired-hide-details-mode))
+
+(when-let ((gls (executable-find "gls")))
+  (setq insert-directory-program gls))
+
+(use-package dired-sidebar
   :ensure t
-  :hook (eglot-managed-mode . flymake-ruff-load))
+  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
+  :custom
+  (dired-sidebar-width 32)
+  (dired-sidebar-theme 'none))
 
 ;; Tree sitter
 
@@ -197,12 +206,6 @@
                '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '((go-mode) . ("gopls"))))
-
-(use-package eglot-booster
-  :after eglot
-  :config
-  (setq eglot-booster-io-only t)
-  (eglot-booster-mode))
 
 ;; Personal defs
 (global-set-key (kbd "C-c k") 'kill-whole-line)
@@ -253,20 +256,6 @@
         (pop-to-buffer buf)
       (vterm))))
 
-(defun my/project-find-file-other-window-always-split ()
-  (interactive)
-  (split-window-right)
-  (other-window 1)
-  (call-interactively #'project-find-file))
-
-(defun my/consult-project-buffer-other-window ()
-  (interactive)
-  (unless (> (length (window-list)) 1)
-    (split-window-right))
-  (other-window 1)
-  (call-interactively #'consult-project-buffer))
-
-
 (defun my-project-breadcrumb ()
   (when-let* ((file (buffer-file-name))
               (project (project-current nil)))
@@ -283,8 +272,21 @@
       (when-let ((path (my-project-breadcrumb)))
         (concat "  " path))))))
 
+
+(defun my/project-find-file-other-window-always-split ()
+  (interactive)
+  (split-window-right)
+  (other-window 1)
+  (call-interactively #'project-find-file))
+
+(defun my/consult-project-buffer-other-window ()
+  (interactive)
+  (unless (> (length (window-list)) 1)
+    (split-window-right))
+  (other-window 1)
+  (call-interactively #'consult-project-buffer))
+
 ;; Hooks
-(add-hook 'flycheck-mode-hook #'flycheck-inline-mode)
 (add-hook 'python-ts-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook 'eglot-ensure)
 (add-hook 'go-mode-hook (lambda () (setq tab-width 4)))
@@ -305,7 +307,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(eglot-booster))
+ '(package-selected-packages
+   '(cape consult corfu diff-hl dired-sidebar dockerfile-mode ef-themes
+	  evil-nerd-commenter exec-path-from-shell expand-region
+	  fancy-compilation gcmh go-mode magit marginalia move-text
+	  orderless rg vertico vterm yaml-mode yasnippet))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url
 		    "https://github.com/jdtsmith/eglot-booster"))))
