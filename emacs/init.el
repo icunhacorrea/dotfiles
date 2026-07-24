@@ -14,6 +14,7 @@
 (setq bidi-inhibit-bpa t)
 (setq ring-bell-function 'ignore)
 (fset 'yes-or-no-p 'y-or-n-p)
+(setq native-comp-async-report-warnings-errors nil)
 (setq which-func-modes '(python-ts-mode))
 (set-face-attribute 'default nil :family "Monaco" :height 140)
 
@@ -89,6 +90,14 @@
 (use-package magit
   :ensure t)
 
+(use-package ultra-scroll
+  :ensure t
+  :init
+  (setq scroll-conservatively 3
+        scroll-margin 0)
+  :config
+  (ultra-scroll-mode 1))
+
 (use-package vertico
   :ensure t
   :init
@@ -131,9 +140,6 @@
 (use-package rg
   :ensure t)
 
-;; (use-package flx
-;;   :ensure flx)
-
 (use-package vterm
   :ensure t
   :config
@@ -166,26 +172,6 @@
   (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
   (yas-global-mode 1))
 
-(use-package dired
-  :ensure nil
-  :custom
-  (dired-listing-switches "-Alh --group-directories-first")
-  (dired-recursive-copies 'always)
-  (dired-recursive-deletes 'always)
-  (dired-dwim-target t)
-  :hook
-  (dired-mode . dired-hide-details-mode))
-
-(when-let ((gls (executable-find "gls")))
-  (setq insert-directory-program gls))
-
-(use-package dired-sidebar
-  :ensure t
-  :bind ("C-x C-n" . dired-sidebar-toggle-sidebar)
-  :custom
-  (dired-sidebar-width 32)
-  (dired-sidebar-theme 'none))
-
 ;; Tree sitter
 
 (setq treesit-language-source-alist
@@ -206,6 +192,15 @@
                '((python-ts-mode) . ("pyright-langserver" "--stdio")))
   (add-to-list 'eglot-server-programs
                '((go-mode) . ("gopls"))))
+
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
+
+(use-package flycheck-eglot
+  :ensure t
+  :after (flycheck eglot)
+  :config (global-flycheck-eglot-mode))
 
 ;; Personal defs
 (global-set-key (kbd "C-c k") 'kill-whole-line)
@@ -307,14 +302,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(cape consult corfu diff-hl dired-sidebar dockerfile-mode ef-themes
-	  evil-nerd-commenter exec-path-from-shell expand-region
-	  fancy-compilation gcmh go-mode magit marginalia move-text
-	  orderless rg vertico vterm yaml-mode yasnippet))
- '(package-vc-selected-packages
-   '((eglot-booster :vc-backend Git :url
-		    "https://github.com/jdtsmith/eglot-booster"))))
+ '(package-selected-packages nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
