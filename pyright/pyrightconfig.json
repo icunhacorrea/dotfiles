@@ -1,8 +1,9 @@
 {
-    "typeCheckingMode": "off",
-    "enableReachabilityAnalysis": false,
-    "diagnosticMode": "openFilesOnly",    
-    "venvPath": "",
-    "venv": "",
+  "typeCheckingMode": "basic",
+  "enableReachabilityAnalysis": false,
+  "diagnosticMode": "openFilesOnly",
+  "reportAttributeAccessIssue": false,
+  "reportArgumentType": false,
+  "venvPath": "",
+  "venv": ""
 }
-
