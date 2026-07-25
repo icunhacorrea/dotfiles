@@ -193,6 +193,12 @@
   (add-to-list 'eglot-server-programs
                '((go-mode) . ("gopls"))))
 
+(use-package eglot-booster
+  :after eglot
+  :config
+  (setq eglot-booster-io-only t)
+  (eglot-booster-mode))
+
 (use-package flycheck
   :ensure t
   :init (global-flycheck-mode))
@@ -267,7 +273,6 @@
       (when-let ((path (my-project-breadcrumb)))
         (concat "  " path))))))
 
-
 (defun my/project-find-file-other-window-always-split ()
   (interactive)
   (split-window-right)
@@ -302,7 +307,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages nil))
+ '(package-selected-packages '(eglot-booster))
+ '(package-vc-selected-packages
+   '((eglot-booster :vc-backend Git :url
+		    "https://github.com/jdtsmith/eglot-booster"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
